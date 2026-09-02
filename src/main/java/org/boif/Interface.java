@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Interface {
     public static void main(String[] args) {
+        BankService bankService = new BankService();
         System.out.println("Welcome to Bank of Insufficient Funds");
 
         try (Scanner scanner = new Scanner(System.in)) {
@@ -16,11 +17,22 @@ public class Interface {
                 System.out.print("Enter your PIN: ");
                 pin = scanner.nextLine();
 
-                if (BankService.validate(accountId, pin))
+                if (bankService.validate(accountId, pin))
                     break;
 
                 System.out.println("Invalid credentials. Please try again.");
             }
+
+            System.out.println();
+
+            System.out.println("Actions:");
+            System.out.println("1. Deposit");
+            System.out.println("2. Withdraw");
+            System.out.println("3. Transfer");
+
+            System.out.print("Please select an action (1, 2, 3): ");
+
+            String action = scanner.nextLine();
         }
     }
 }
