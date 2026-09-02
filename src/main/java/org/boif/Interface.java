@@ -23,28 +23,39 @@ public class Interface {
                 System.out.println("Invalid credentials. Please try again.");
             }
 
-            System.out.println();
 
-            System.out.println("Actions:");
-            System.out.println("1. Deposit");
-            System.out.println("2. Withdraw");
-            System.out.println("3. Transfer");
+                System.out.println();
+            while(true) {
+                System.out.println("Actions:");
+                System.out.println("1. Deposit");
+                System.out.println("2. Withdraw");
+                System.out.println("3. Transfer");
 
-            System.out.print("Please select an action (1, 2, 3): ");
 
-            String action = scanner.nextLine();
+                System.out.print("Please select an action (1, 2, 3): ");
 
-            if(action.equals("1")){
-                System.out.println("Please enter the amount to Deposit:  ");
-                String deposit = scanner.nextLine();
-            }else if(action.equals("2")){
-                System.out.println("Please enter the amount to Withdraw:  ");
-                String withdraw = scanner.nextLine();
-            }else if(action.equals("3")){
-                System.out.println("Please enter the amount to Transfer:  ");
-                String transfer = scanner.nextLine();
-            }else{
-                System.out.println("Please select an action (1, 2, 3)");
+                String action = scanner.nextLine();
+
+                if (action.equals("1")) {
+                    System.out.println("You total balance is");
+                    System.out.println("Please enter the amount to Deposit:  ");
+                    String deposit = scanner.nextLine(); break;
+
+                } else if (action.equals("2")) {
+                    System.out.println("You total balance is");
+                    System.out.println("Please enter the amount to Withdraw:  ");
+                    String withdraw = scanner.nextLine(); break;
+                } else if (action.equals("3")) {
+                    System.out.println("You total balance is");
+                    System.out.println("Please enter the amount to Transfer:  ");
+                    String transfer = scanner.nextLine(); break;
+                } else {
+                    System.out.println();
+
+                    System.out.println("Incorrect Input");
+
+
+                }
 
             }
         }
