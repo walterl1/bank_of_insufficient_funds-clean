@@ -33,6 +33,20 @@ public class Interface {
             System.out.print("Please select an action (1, 2, 3): ");
 
             String action = scanner.nextLine();
+
+            if(action.equals("1")){
+                System.out.println("Please enter the amount to Deposit:  ");
+                String deposit = scanner.nextLine();
+            }else if(action.equals("2")){
+                System.out.println("Please enter the amount to Withdraw:  ");
+                String withdraw = scanner.nextLine();
+            }else if(action.equals("3")){
+                System.out.println("Please enter the amount to Transfer:  ");
+                String transfer = scanner.nextLine();
+            }else{
+                System.out.println("Please select an action (1, 2, 3)");
+
+            }
         }
     }
 }
