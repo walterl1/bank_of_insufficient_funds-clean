@@ -30,6 +30,8 @@ public class Interface {
                 System.out.println("1. Deposit");
                 System.out.println("2. Withdraw");
                 System.out.println("3. Transfer");
+                System.out.println("4. Check Balance");
+                System.out.println("5. Exit");
 
 
                 System.out.print("Please select an action (1, 2, 3): ");
@@ -49,9 +51,13 @@ public class Interface {
                     System.out.println("You total balance is");
                     System.out.println("Please enter the amount to Transfer:  ");
                     String transfer = scanner.nextLine(); break;
+                } else if (action.equals("4")) {
+                    System.out.println("Your total balance is: " + bankService.getBalance(accountId));
+                } else if (action.equals("5")) {
+                    System.out.println("Thank you for using Bank of Insufficient Funds.");
+                    break;
                 } else {
                     System.out.println();
-
                     System.out.println("Incorrect Input");
 
 
