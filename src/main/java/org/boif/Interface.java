@@ -23,8 +23,13 @@ public class Interface {
                 System.out.println("Invalid credentials. Please try again.");
             }
 
+            System.out.println();
 
-                System.out.println();
+            System.out.println("Login successful!");
+            System.out.println("Welcome, " + accountId + "!");
+
+            System.out.println();
+
             while(true) {
                 System.out.println("Actions:");
                 System.out.println("1. Deposit");
