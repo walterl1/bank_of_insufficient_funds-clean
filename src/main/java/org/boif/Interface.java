@@ -23,13 +23,8 @@ public class Interface {
                 System.out.println("Invalid credentials. Please try again.");
             }
 
-            System.out.println();
 
-            System.out.println("Login successful!");
-            System.out.println("Welcome, " + accountId + "!");
-
-            System.out.println();
-
+                System.out.println();
             while(true) {
                 System.out.println("Actions:");
                 System.out.println("1. Deposit");
@@ -39,21 +34,27 @@ public class Interface {
                 System.out.println("5. Exit");
 
 
-                System.out.print("Please select an action (1, 2, 3): ");
+                System.out.print("Please select an action (1, 2, 3, 4, 5): ");
 
                 String action = scanner.nextLine();
 
                 if (action.equals("1")) {
-                    System.out.println("You total balance is");
+                    System.out.println("You total balance is: " + bankService.getBalance(accountId));
                     System.out.println("Please enter the amount to Deposit:  ");
                     String deposit = scanner.nextLine(); break;
+                    
 
                 } else if (action.equals("2")) {
-                    System.out.println("You total balance is");
+                    System.out.println("You total balance is: " + bankService.getBalance(accountId));
                     System.out.println("Please enter the amount to Withdraw:  ");
-                    String withdraw = scanner.nextLine(); break;
+                    String withdraw = scanner.nextLine(); 
+                    if (bankService.withdraw(accountId, Double.parseDouble(withdraw))){
+                        System.out.println("Insufficient funds");
+                    } else{
+                        System.out.println("Withdrawal succesful. Current balance =" + bankService.getBalance(accountId));
+                    }
                 } else if (action.equals("3")) {
-                    System.out.println("You total balance is");
+                    System.out.println("You total balance is: " + bankService.getBalance(accountId));
                     System.out.println("Please enter the amount to Transfer:  ");
                     String transfer = scanner.nextLine(); break;
                 } else if (action.equals("4")) {
