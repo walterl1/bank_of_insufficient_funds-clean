@@ -60,10 +60,13 @@ public class Interface {
                         System.out.println("You total balance is: " + bankService.getBalance(accountId));
                         System.out.println("Please enter the amount to Withdraw:  ");
                         String withdraw = scanner.nextLine(); 
-                        if (bankService.withdraw(accountId, Double.parseDouble(withdraw))){
-                            System.out.println("Insufficient funds");
+
+                        double wd = Double.parseDouble(withdraw);
+                        double newbalance = bankService.withdraw(accountId, wd);
+                        if(newbalance!=-1){
+                            System.out.println("Withdrawal succesful. Current balance = " + newbalance);
                         } else{
-                            System.out.println("Withdrawal succesful. Current balance =" + bankService.getBalance(accountId));
+                            System.out.println("Insufficient funds");
                         }
                         break;
                     }

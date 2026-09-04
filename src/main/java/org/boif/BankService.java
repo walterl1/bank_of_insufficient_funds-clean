@@ -24,11 +24,12 @@ public class BankService {
         return total;
     }
     
-    public boolean withdraw(String accountId, double amount) {
+    public double withdraw(String accountId, double amount) {
         if (amount > getBalance(accountId)) {
-            return false;
+            return -1;
         }
-        return true;
+        double currentBalance = getBalance(accountId) - amount;
+        return currentBalance;
     }
 
    
