@@ -41,7 +41,18 @@ public class Interface {
                 if (action.equals("1")) {
                     System.out.println("You total balance is: " + bankService.getBalance(accountId));
                     System.out.println("Please enter the amount to Deposit:  ");
-                    String deposit = scanner.nextLine(); break;
+                    String deposit = scanner.nextLine();
+
+                    double dp = Double.parseDouble(deposit);
+                    double newbalance= bankService.depositfunds(accountId,dp);
+                    if(newbalance!=-1){
+                        System.out.println("Deposit Successful. New Balance ="+ newbalance);
+                    }else{
+                        System.out.println("Deposit Unsuccessful. Please try again");
+                    }
+
+
+                    break;
                     
 
                 } else if (action.equals("2")) {

@@ -15,6 +15,14 @@ public class BankService {
         return 1000.0;
 
     }
+    public double depositfunds(String accountID, double deposit){
+        if(deposit<0){
+            return -1;
+        }
+
+        double total = getBalance(accountID)+deposit;
+        return total;
+    }
     
     public boolean withdraw(String accountId, double amount) {
         if (amount > getBalance(accountId)) {
