@@ -25,7 +25,9 @@ public class Interface {
 
 
                 System.out.println();
-            while(true) {
+
+            boolean on = true;
+            while(on) {
                 System.out.println("Actions:");
                 System.out.println("1. Deposit");
                 System.out.println("2. Withdraw");
@@ -36,49 +38,55 @@ public class Interface {
 
                 System.out.print("Please select an action (1, 2, 3, 4, 5): ");
 
-                String action = scanner.nextLine();
+                int action = scanner.nextInt();
+                scanner.nextLine();
 
-                if (action.equals("1")) {
-                    System.out.println("You total balance is: " + bankService.getBalance(accountId));
-                    System.out.println("Please enter the amount to Deposit:  ");
-                    String deposit = scanner.nextLine();
+                switch (action) {
+                    case 1: {
+                        System.out.println("You total balance is: " + bankService.getBalance(accountId));
+                        System.out.println("Please enter the amount to Deposit:  ");
+                        String deposit = scanner.nextLine();
 
-                    double dp = Double.parseDouble(deposit);
-                    double newbalance= bankService.depositfunds(accountId,dp);
-                    if(newbalance!=-1){
-                        System.out.println("Deposit Successful. New Balance ="+ newbalance);
-                    }else{
-                        System.out.println("Deposit Unsuccessful. Please try again");
+                        double dp = Double.parseDouble(deposit);
+                        double newbalance= bankService.depositfunds(accountId,dp);
+                        if(newbalance!=-1){
+                            System.out.println("Deposit Successful. New Balance ="+ newbalance);
+                        }else{
+                            System.out.println("Deposit Unsuccessful. Please try again");
+                        }
+                        break;
                     }
-
-
-                    break;
-                    
-
-                } else if (action.equals("2")) {
-                    System.out.println("You total balance is: " + bankService.getBalance(accountId));
-                    System.out.println("Please enter the amount to Withdraw:  ");
-                    String withdraw = scanner.nextLine(); 
-                    if (bankService.withdraw(accountId, Double.parseDouble(withdraw))){
-                        System.out.println("Insufficient funds");
-                    } else{
-                        System.out.println("Withdrawal succesful. Current balance =" + bankService.getBalance(accountId));
+                    case 2: {
+                        System.out.println("You total balance is: " + bankService.getBalance(accountId));
+                        System.out.println("Please enter the amount to Withdraw:  ");
+                        String withdraw = scanner.nextLine(); 
+                        if (bankService.withdraw(accountId, Double.parseDouble(withdraw))){
+                            System.out.println("Insufficient funds");
+                        } else{
+                            System.out.println("Withdrawal succesful. Current balance =" + bankService.getBalance(accountId));
+                        }
+                        break;
                     }
-                } else if (action.equals("3")) {
-                    System.out.println("You total balance is: " + bankService.getBalance(accountId));
-                    System.out.println("Please enter the amount to Transfer:  ");
-                    String transfer = scanner.nextLine(); break;
-                } else if (action.equals("4")) {
-                    System.out.println("Your total balance is: " + bankService.getBalance(accountId));
-                } else if (action.equals("5")) {
-                    System.out.println("Thank you for using Bank of Insufficient Funds.");
-                    break;
-                } else {
-                    System.out.println();
-                    System.out.println("Incorrect Input");
-
-
+                    case 3: {
+                        System.out.println("You total balance is: " + bankService.getBalance(accountId));
+                        System.out.println("Please enter the amount to Transfer:  ");
+                        String transfer = scanner.nextLine(); break;
+                    }
+                    case 4: {
+                        System.out.println("Your total balance is: " + bankService.getBalance(accountId));
+                        break;
+                    }
+                    case 5: {
+                        System.out.println("Thank you for using Bank of Insufficient Funds.");
+                        on = false;
+                        break;
+                    }
+                    default: {
+                        System.out.println();
+                        System.out.println("Incorrect Input");
+                    }
                 }
+
 
             }
         }
