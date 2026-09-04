@@ -17,7 +17,7 @@ public class Interface {
                 System.out.print("Enter your PIN: ");
                 pin = scanner.nextLine();
 
-                if (bankService.validate(accountId, pin))
+                if (bankService.validateAccount(accountId, pin))
                     break;
 
                 System.out.println("Invalid credentials. Please try again.");
