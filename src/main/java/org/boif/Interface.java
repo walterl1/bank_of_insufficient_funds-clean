@@ -84,6 +84,7 @@ public class Interface {
                     default: {
                         System.out.println();
                         System.out.println("Incorrect Input");
+                        System.out.println("");
                     }
                 }
 
