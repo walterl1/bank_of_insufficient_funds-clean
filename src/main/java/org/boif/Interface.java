@@ -72,8 +72,20 @@ public class Interface {
                     }
                     case 3: {
                         System.out.println("You total balance is: " + bankService.getBalance(accountId));
-                        System.out.println("Please enter the amount to Transfer:  ");
-                        String transfer = scanner.nextLine(); break;
+                        System.out.print("Please enter the recipient account ID: ");
+                        String recipientAccountId = scanner.nextLine();
+                        
+                        System.out.print("Please enter the amount to Transfer:  ");
+                        String transfer = scanner.nextLine();
+                        double tr = Double.parseDouble(transfer);
+                        double newbalance = bankService.transfer(accountId, recipientAccountId, tr);
+                        if(newbalance!=-1){
+                            System.out.println("Transfer successful. Current balance - " + newbalance);
+                        } else 
+                            System.out.println("Transfer unsuccessful. Please try again");
+                        break;
+
+                        
                     }
                     case 4: {
                         System.out.println("Your total balance is: " + bankService.getBalance(accountId));

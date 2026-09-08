@@ -3,7 +3,6 @@ package org.boif;
 public class Account {
     private String accountId;
     private String pin;
-
     private double balance;
 
     public Account(String accountId, String pin) {
