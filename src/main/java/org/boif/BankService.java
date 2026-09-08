@@ -4,15 +4,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BankService {
-    final static Logger logger = LoggerFactory.getLogger(BankService.class);
+    final Logger logger = LoggerFactory.getLogger(BankService.class);
+
+    private Account account = null;
 
     public boolean validateAccount(String accountId, String pin) {
         logger.info("Account with accountId {} successfully logged in", accountId);
+
+        account = new Account(accountId, pin);
         return true;
     }
 
     public double getBalance(String accountId) {
-        return 1000.0;
+        return account.getBalance();
 
     }
     public double depositfunds(String accountID, double deposit){
@@ -24,14 +28,19 @@ public class BankService {
         return total;
     }
     
-    public boolean withdraw(String accountId, double amount) {
+    public double withdraw(String accountId, double amount) {
         if (amount > getBalance(accountId)) {
-            return false;
+            return -1;
         }
-        return true;
+        double currentBalance = getBalance(accountId) - amount;
+        return currentBalance;
     }
 
-   
+    public boolean logout() {
+        logger.info("Account with accountId {} successfully logged out", account.getAccountId());
+        account = null;
+        return true;
+    }
         
 
     
