@@ -31,6 +31,7 @@ public class BankService {
     }
 
     public double getBalance(Account account) {
+
         return account.getBalance();
 
     }
@@ -38,6 +39,7 @@ public class BankService {
         if(deposit<1){
 
             System.out.println("Deposit amount has to be atleast $1.");
+            logger.info("Account with accountId :{} was unable to complete transaction due to a lack of funds.\n", account.getAccountId());
             return;
         }
 
@@ -47,7 +49,7 @@ public class BankService {
 
             System.out.println("Transaction unsuccessful");
             logger.info("Account with accountId :{} was unable to complete transactions\n", account.getAccountId());
-            return;
+
 
         }
         else{
@@ -55,7 +57,6 @@ public class BankService {
             System.out.println("Transaction successful. Thank you for banking with us."
                     + "\nCurrent Balance: $" + updatedAccount.getBalance());
             logger.info("\nAccount with accountId: {} transaction was successful: \n", account.getAccountId());
-            return;
 
         }
 
@@ -65,6 +66,7 @@ public class BankService {
         if (amount > getBalance(account)) {
 
             System.out.println("Insufficient Funds");
+            logger.info("\nAccount with accountId: {} transaction was unsuccessful: Insufficient funds: \n", account.getAccountId());
             return;
         }
         account.setBalance(account.getBalance() - amount);
@@ -73,7 +75,7 @@ public class BankService {
 
             System.out.println("Transaction unsuccessful");
             logger.info("Account with accountId: {} was unable to complete transactions\n", account.getAccountId());
-            return;
+
 
         }
         else{
@@ -81,7 +83,7 @@ public class BankService {
             System.out.println("Transaction successful. Thank you for Banking with us."
                     + "\nCurrent Balance: $" + updatedAccount.getBalance());
             logger.info("\nAccount with accountId: {} transaction was successful\n", account.getAccountId());
-            return;
+
 
         }
 
@@ -114,4 +116,20 @@ public class BankService {
        Account account1 = bankingRepository.loginUser(accountId, pin);
        return account1;
     }
+
+    public void transferBetweenAccounts(Account account1, String accountId, double transferAmount) {
+
+        if(transferAmount > account1.getBalance())
+        {
+            System.out.println("Insufficient funds");
+            return;
+        }
+
+        Account account2 = bankingRepository.loginUser(accountId);
+        account1.setBalance(account1.getBalance() - transferAmount);
+        account2.setBalance(account2.getBalance() + transferAmount);
+        bankingRepository.makeTransfer(account1, account2);
+    }
+
+
 }

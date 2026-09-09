@@ -1,10 +1,17 @@
 package org.boif;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Scanner;
 
 public class Interface {
     public static void main(String[] args) {
+
         BankService bankService = new BankService();
+        final Logger logger = LoggerFactory.getLogger(BankService.class);
+
+
         System.out.println("Welcome to Bank of Insufficient Funds");
 
         try (Scanner scanner = new Scanner(System.in)) {
@@ -18,6 +25,8 @@ public class Interface {
             if(signupLogin.equals("1")){
 
                 bankService.signupUser();
+                logger.info("New account registration.");
+
             }
 
 
@@ -32,11 +41,14 @@ public class Interface {
                  if(loggedIn == null){
 
                      System.out.println("Invalid credentials. Please try again.");
+                     logger.info("Account with accountId {} login attempt failed.", loggedIn.getAccountId());
 
                  } else {
 
                      System.out.println("\nLog in attempt successful.");
                      System.out.println("\nWelcome.");
+                     logger.info("Account with accountId {} login attempt successful.", loggedIn.getAccountId());
+
 
                      break;
                  }
@@ -62,6 +74,12 @@ public class Interface {
                 scanner.nextLine();
                 Account account1 = bankService.getLoggedInAccount(accountId, pin);
 
+                if(account1.getBalance() < 0){
+                    System.out.println("Please note that you account is negative and needs to " +
+                            "be taken care soon.  ");
+
+                }
+
 
                 switch (action) {
 
@@ -85,8 +103,12 @@ public class Interface {
                     }
                     case 3: {
                         System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
-                        System.out.println("Please enter the amount to Transfer:  ");
+                        System.out.println("\nPlease enter the amount to Transfer:  ");
                         String transfer = scanner.nextLine();
+                        double transferAmount = Double.parseDouble(transfer);
+                        System.out.println("\nPlease enter the account Id you wish to make a transfer to:  ");
+                        String accounId = scanner.nextLine();
+                        bankService.transferBetweenAccounts(account1, accounId, transferAmount);
                         break;
                     }
                     case 4: {
@@ -105,9 +127,7 @@ public class Interface {
                     }
                 }
 
-
             }
-              scanner.close();
         }
     }
 }
