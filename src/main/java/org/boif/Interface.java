@@ -11,16 +11,34 @@ public class Interface {
             String accountId = "";
             String pin = "";
 
+
+            System.out.println("Press 1 for Registration. Press 2 if you have an existing account.");
+            String signupLogin = scanner.nextLine();
+
+            if(signupLogin.equals("1")){
+
+                bankService.signupUser();
+            }
+
+
             while (true) {
                 System.out.print("Enter your account ID: ");
                 accountId = scanner.nextLine();
                 System.out.print("Enter your PIN: ");
                 pin = scanner.nextLine();
 
-                if (bankService.validateAccount(accountId, pin))
-                    break;
+                 Account loggedIn = bankService.validateAccount(accountId, pin);
 
-                System.out.println("Invalid credentials. Please try again.");
+                 if(loggedIn == null){
+
+                     System.out.println("Invalid credentials. Please try again.");
+
+                 } else {
+
+                     System.out.println("Log in attempt successful.");
+                     break;
+                 }
+
             }
 
 
@@ -40,43 +58,36 @@ public class Interface {
 
                 int action = scanner.nextInt();
                 scanner.nextLine();
+                Account account1 = bankService.getLoggedInAccount(accountId, pin);
+
 
                 switch (action) {
+
                     case 1: {
-                        System.out.println("You total balance is: " + bankService.getBalance(accountId));
+                        System.out.println("You total balance is: " + account1.getBalance());
                         System.out.println("Please enter the amount to Deposit:  ");
                         String deposit = scanner.nextLine();
-
-                        double dp = Double.parseDouble(deposit);
-                        double newbalance= bankService.depositfunds(accountId,dp);
-                        if(newbalance!=-1){
-                            System.out.println("Deposit Successful. New Balance ="+ newbalance);
-                        }else{
-                            System.out.println("Deposit Unsuccessful. Please try again");
-                        }
+                        double depositAmount = Double.parseDouble(deposit);
+                        Account account = bankService.depositfunds(account1, depositAmount);
                         break;
+
+
                     }
                     case 2: {
-                        System.out.println("You total balance is: " + bankService.getBalance(accountId));
+                        System.out.println("You total balance is: " + bankService.getBalance(account1));
                         System.out.println("Please enter the amount to Withdraw:  ");
-                        String withdraw = scanner.nextLine(); 
-
+                        String withdraw = scanner.nextLine();
                         double wd = Double.parseDouble(withdraw);
-                        double newbalance = bankService.withdraw(accountId, wd);
-                        if(newbalance!=-1){
-                            System.out.println("Withdrawal succesful. Current balance = " + newbalance);
-                        } else{
-                            System.out.println("Insufficient funds");
-                        }
+                        bankService.withdraw(account1, wd);
                         break;
                     }
                     case 3: {
-                        System.out.println("You total balance is: " + bankService.getBalance(accountId));
+                        System.out.println("You total balance is: " + bankService.getBalance(account1));
                         System.out.println("Please enter the amount to Transfer:  ");
                         String transfer = scanner.nextLine(); break;
                     }
                     case 4: {
-                        System.out.println("Your total balance is: " + bankService.getBalance(accountId));
+                        System.out.println("Your total balance is: " + bankService.getBalance(account1));
                         break;
                     }
                     case 5: {
@@ -93,6 +104,7 @@ public class Interface {
 
 
             }
+              scanner.close();
         }
     }
 }
