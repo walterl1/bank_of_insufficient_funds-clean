@@ -34,11 +34,11 @@ public class BankService {
         return account.getBalance();
 
     }
-    public Account depositfunds(Account account, double deposit){
+    public void depositfunds(Account account, double deposit){
         if(deposit<1){
 
             System.out.println("Deposit amount has to be atleast $1.");
-            return account;
+            return;
         }
 
         account.setBalance(account.getBalance() + deposit);
@@ -46,42 +46,42 @@ public class BankService {
         if(updatedAccount == null){
 
             System.out.println("Transaction unsuccessful");
-            logger.info("Account with accountId {} was unable to complete transactions", account.getAccountId());
-            return account;
+            logger.info("Account with accountId :{} was unable to complete transactions\n", account.getAccountId());
+            return;
 
         }
         else{
 
-            System.out.println("Transaction successful. Previous balance:  $" + account.getBalance()
-                    + "Current Balance $" + updatedAccount.getBalance());
-            logger.info("\nAccount with accountId {} transaction was successful", account.getAccountId());
-            return updatedAccount;
+            System.out.println("Transaction successful. Thank you for banking with us."
+                    + "\nCurrent Balance: $" + updatedAccount.getBalance());
+            logger.info("\nAccount with accountId: {} transaction was successful: \n", account.getAccountId());
+            return;
 
         }
 
 
     }
-    public Account withdraw(Account account, double amount) {
+    public void withdraw(Account account, double amount) {
         if (amount > getBalance(account)) {
 
             System.out.println("Insufficient Funds");
-            return account;
+            return;
         }
         account.setBalance(account.getBalance() - amount);
         Account updatedAccount = bankingRepository.depositFunds(account);
         if(updatedAccount == null){
 
             System.out.println("Transaction unsuccessful");
-            logger.info("Account with accountId {} was unable to complete transactions", account.getAccountId());
-            return account;
+            logger.info("Account with accountId: {} was unable to complete transactions\n", account.getAccountId());
+            return;
 
         }
         else{
 
-            System.out.println("Transaction successful. Previous balance:  $" + account.getBalance()
-                    + "Current Balance $" + updatedAccount.getBalance());
-            logger.info("\nAccount with accountId {} transaction was successful", account.getAccountId());
-            return updatedAccount;
+            System.out.println("Transaction successful. Thank you for Banking with us."
+                    + "\nCurrent Balance: $" + updatedAccount.getBalance());
+            logger.info("\nAccount with accountId: {} transaction was successful\n", account.getAccountId());
+            return;
 
         }
 
@@ -96,7 +96,7 @@ public class BankService {
 
     public void signupUser() {
         System.out.println("Thank you for choosing Bank of Insufficient Funds. Please enter an" +
-                " account number to use for logging in.");
+                " account Id to use for logging in.");
         String accountId = scanner.nextLine();
         System.out.println("\nPlease enter a 6-digit pin number that you will remember.");
         String pinNumber = scanner.nextLine();

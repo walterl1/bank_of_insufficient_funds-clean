@@ -35,7 +35,9 @@ public class Interface {
 
                  } else {
 
-                     System.out.println("Log in attempt successful.");
+                     System.out.println("\nLog in attempt successful.");
+                     System.out.println("\nWelcome.");
+
                      break;
                  }
 
@@ -46,15 +48,15 @@ public class Interface {
 
             boolean on = true;
             while(on) {
-                System.out.println("Actions:");
+                System.out.println("Actions:\n");
                 System.out.println("1. Deposit");
                 System.out.println("2. Withdraw");
                 System.out.println("3. Transfer");
                 System.out.println("4. Check Balance");
-                System.out.println("5. Exit");
+                System.out.println("5. Exit\n");
 
 
-                System.out.print("Please select an action (1, 2, 3, 4, 5): ");
+                System.out.print("Please select an action (1, 2, 3, 4, 5): \n");
 
                 int action = scanner.nextInt();
                 scanner.nextLine();
@@ -64,17 +66,17 @@ public class Interface {
                 switch (action) {
 
                     case 1: {
-                        System.out.println("You total balance is: " + account1.getBalance());
+                        System.out.println("\nYou total balance is: " + account1.getBalance());
                         System.out.println("Please enter the amount to Deposit:  ");
                         String deposit = scanner.nextLine();
                         double depositAmount = Double.parseDouble(deposit);
-                        Account account = bankService.depositfunds(account1, depositAmount);
+                        bankService.depositfunds(account1, depositAmount);
                         break;
 
 
                     }
                     case 2: {
-                        System.out.println("You total balance is: " + bankService.getBalance(account1));
+                        System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
                         System.out.println("Please enter the amount to Withdraw:  ");
                         String withdraw = scanner.nextLine();
                         double wd = Double.parseDouble(withdraw);
@@ -82,23 +84,24 @@ public class Interface {
                         break;
                     }
                     case 3: {
-                        System.out.println("You total balance is: " + bankService.getBalance(account1));
+                        System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
                         System.out.println("Please enter the amount to Transfer:  ");
-                        String transfer = scanner.nextLine(); break;
+                        String transfer = scanner.nextLine();
+                        break;
                     }
                     case 4: {
-                        System.out.println("Your total balance is: " + bankService.getBalance(account1));
+                        System.out.println("\nYour total balance is: " + bankService.getBalance(account1));
                         break;
                     }
                     case 5: {
-                        System.out.println("Thank you for using Bank of Insufficient Funds.");
+                        System.out.println("\nThank you for using Bank of Insufficient Funds.");
                         on = false;
                         break;
                     }
                     default: {
                         System.out.println();
                         System.out.println("Incorrect Input");
-                        System.out.println("");
+                        System.out.println("Please select again only use 1,2,3,4 or 5\n");
                     }
                 }
 
