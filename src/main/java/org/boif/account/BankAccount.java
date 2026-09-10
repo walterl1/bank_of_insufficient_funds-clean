@@ -9,7 +9,7 @@ public class BankAccount {
         private String accountOwner;
         private String firstName;
         private String lastName;
-        public static String nameOfBank = "William's and Financial";
+        public static String nameOfBank = "Bank of Insufficient Funds";
         private long accountNumber;
         private String accountType;
         private double accountBalance;
