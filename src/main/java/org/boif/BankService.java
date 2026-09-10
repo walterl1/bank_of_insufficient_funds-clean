@@ -119,6 +119,12 @@ public class BankService {
 
     public void transferBetweenAccounts(Account account1, String accountId, double transferAmount) {
 
+        if (transferAmount <= 0) {
+            System.out.println("Transfer amount has be greater than $0.");
+            logger.error("Account with accountId {} Transfer attempt failed due to zero or negative transfer.", account1.getAccountId());
+            return;
+        }
+
         if(transferAmount > account1.getBalance())
         {
             System.out.println("Insufficient funds");
@@ -127,6 +133,12 @@ public class BankService {
         }
 
         Account account2 = bankingRepository.loginUser(accountId);
+        if (account2 == null) {
+            System.out.println("Account with accountId " + accountId + " does not exist");
+            logger.error("Account with accountId {} Transfer attempt failed due to inexistent target account.", account1.getAccountId());
+            return;
+        }
+
         account1.setBalance(account1.getBalance() - transferAmount);
         account2.setBalance(account2.getBalance() + transferAmount);
         bankingRepository.makeTransfer(account1, account2);
