@@ -122,6 +122,7 @@ public class BankService {
         if(transferAmount > account1.getBalance())
         {
             System.out.println("Insufficient funds");
+            logger.info("Account with accountId {} Transfer attempt failed due to insufficient funds.", account1.getAccountId());
             return;
         }
 
@@ -129,6 +130,9 @@ public class BankService {
         account1.setBalance(account1.getBalance() - transferAmount);
         account2.setBalance(account2.getBalance() + transferAmount);
         bankingRepository.makeTransfer(account1, account2);
+        logger.info("Account with accountId {} Transaction successful. Transfer sent. $\n" + account1.getBalance(), account1.getAccountId());
+        logger.info("Account with accountId {} Transaction successful. Transfer sent. $\n" + account2.getBalance(), account2.getAccountId());
+
     }
 
 
