@@ -39,7 +39,7 @@ public class BankService {
         if(deposit<1){
 
             System.out.println("Deposit amount has to be atleast $1.");
-            logger.info("Account with accountId :{} was unable to complete transaction due to a lack of funds.\n", account.getAccountId());
+            logger.error("Account with accountId :{} was unable to complete transaction due to a lack of funds.\n", account.getAccountId());
             return;
         }
 
@@ -48,7 +48,7 @@ public class BankService {
         if(updatedAccount == null){
 
             System.out.println("Transaction unsuccessful");
-            logger.info("Account with accountId :{} was unable to complete transactions\n", account.getAccountId());
+            logger.error("Account with accountId :{} was unable to complete transactions\n", account.getAccountId());
 
 
         }
@@ -66,7 +66,7 @@ public class BankService {
         if (amount > getBalance(account)) {
 
             System.out.println("Insufficient Funds");
-            logger.info("\nAccount with accountId: {} transaction was unsuccessful: Insufficient funds: \n", account.getAccountId());
+            logger.error("\nAccount with accountId: {} transaction was unsuccessful: Insufficient funds: \n", account.getAccountId());
             return;
         }
         account.setBalance(account.getBalance() - amount);
@@ -74,7 +74,7 @@ public class BankService {
         if(updatedAccount == null){
 
             System.out.println("Transaction unsuccessful");
-            logger.info("Account with accountId: {} was unable to complete transactions\n", account.getAccountId());
+            logger.error("Account with accountId: {} was unable to complete transactions\n", account.getAccountId());
 
 
         }
@@ -122,7 +122,7 @@ public class BankService {
         if(transferAmount > account1.getBalance())
         {
             System.out.println("Insufficient funds");
-            logger.info("Account with accountId {} Transfer attempt failed due to insufficient funds.", account1.getAccountId());
+            logger.error("Account with accountId {} Transfer attempt failed due to insufficient funds.", account1.getAccountId());
             return;
         }
 
