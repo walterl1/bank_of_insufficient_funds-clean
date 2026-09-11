@@ -94,8 +94,13 @@ public class BankService {
 
         Account signupAccount = new Account(accountId, pinNumber, 0);
         boolean res = bankingRepository.signupUser(signupAccount);
-
-        return res ? "Successfully created account! Please login." : "Failed to create account.";
+        if (res) {
+            logger.info("Successfully created account with accountId " + accountId + "!");
+            return "Successfully created account!";
+        } else {
+            logger.error("Failed to create account with accountId " + accountId + ".");
+            return "Failed to create account.";
+        }
     }
 
 
