@@ -196,7 +196,7 @@ public class BankingRepository {
     }
 
     public List<Transaction> getTransactions(Account account) {
-        String query = "SELECT type, amount, createdAt FROM transactions WHERE accountId = " + account.getAccountId();
+        String query = "SELECT type, amount, createdAt FROM transactions WHERE accountId = '" + account.getAccountId() + "'";
         List<Transaction> transactions = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url); Statement s = connection.createStatement(); ResultSet rs = s.executeQuery(query)) {
             while (rs.next()) {
