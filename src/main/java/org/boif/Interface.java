@@ -41,13 +41,11 @@ public class Interface {
                  if(loggedIn == null){
 
                      System.out.println("Invalid credentials. Please try again.");
-                     logger.info("Account with accountId {} login attempt failed.", loggedIn.getAccountId());
 
                  } else {
 
                      System.out.println("\nLog in attempt successful.");
                      System.out.println("\nWelcome.");
-                     logger.info("Account with accountId {} login attempt successful.", loggedIn.getAccountId());
 
 
                      break;
@@ -123,7 +121,7 @@ public class Interface {
                     default: {
                         System.out.println();
                         System.out.println("Incorrect Input");
-                        System.out.println("Please select again only use 1,2,3,4 or 5\n");
+                        System.out.println("Please choose again only select 1,2,3,4 or 5\n");
                     }
                 }
 

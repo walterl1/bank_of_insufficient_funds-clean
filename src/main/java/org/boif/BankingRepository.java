@@ -1,18 +1,19 @@
 package org.boif;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
 public class BankingRepository {
-
+    private final Logger logger = LoggerFactory.getLogger(BankService.class);
+    private static final String url = "jdbc:sqlite:BankAccounts.db";
 
     public void signupUser(Account signupAccount) {
 
 
             String query = "INSERT INTO account(accountId, pin, balance) " +
                     "Values(?, ?, ?)";
-
-            String url = "jdbc:sqlite:BankAccounts.db";
 
             try (Connection con = DriverManager.getConnection(url)) {
 
@@ -49,8 +50,6 @@ public class BankingRepository {
 
         String query = "SELECT * FROM account where accountId = ? AND pin = ?";
 
-        String url = "jdbc:sqlite:BankAccounts.db";
-
 
         try(Connection con = DriverManager.getConnection(url)) {
 
@@ -86,8 +85,6 @@ public class BankingRepository {
 
         String query = "SELECT * FROM account where accountId = ?";
 
-        String url = "jdbc:sqlite:BankAccounts.db";
-
 
         try(Connection con = DriverManager.getConnection(url)) {
 
@@ -121,8 +118,6 @@ public class BankingRepository {
 
             String query2 = "UPDATE account set balance = ? WHERE userId = ?";
 
-            String url = "jdbc:sqlite:BankAccounts.db";
-
 
             try (Connection con = DriverManager.getConnection(url)){
 
@@ -155,7 +150,6 @@ public class BankingRepository {
         String query = "UPDATE account set balance = ? WHERE accountId = ?";
 
 
-        String url = "jdbc:sqlite:BankAccounts.db";
 
 
         try{
@@ -200,6 +194,19 @@ public class BankingRepository {
         }
 
 
+    }
+
+    public void recordTransaction(Account account, String type, double amount) {
+        String query = "INSERT INTO transactions (accountId, type, amount) VALUES (?, ?, ?)";
+        try (Connection connection = DriverManager.getConnection(url); PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, account.getAccountId());
+            ps.setString(2, type);
+            ps.setDouble(3, amount);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("SQLException thrown while recording transaction: " + e.getMessage());
+        }
     }
 }
 

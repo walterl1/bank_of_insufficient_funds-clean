@@ -39,7 +39,7 @@ public class BankService {
         if(deposit<1){
 
             System.out.println("Deposit amount has to be atleast $1.");
-            logger.info("Account with accountId :{} was unable to complete transaction due to a lack of funds.\n", account.getAccountId());
+            logger.error("Account with accountId :{} was unable to complete transaction due to a lack of funds.\n", account.getAccountId());
             return;
         }
 
@@ -48,7 +48,7 @@ public class BankService {
         if(updatedAccount == null){
 
             System.out.println("Transaction unsuccessful");
-            logger.info("Account with accountId :{} was unable to complete transactions\n", account.getAccountId());
+            logger.error("Account with accountId :{} was unable to complete transactions\n", account.getAccountId());
 
 
         }
@@ -56,6 +56,7 @@ public class BankService {
 
             System.out.println("Transaction successful. Thank you for banking with us."
                     + "\nCurrent Balance: $" + updatedAccount.getBalance());
+            bankingRepository.recordTransaction(account, "DEPOSIT", deposit);
             logger.info("\nAccount with accountId: {} transaction was successful: \n", account.getAccountId());
 
         }
@@ -66,7 +67,7 @@ public class BankService {
         if (amount > getBalance(account)) {
 
             System.out.println("Insufficient Funds");
-            logger.info("\nAccount with accountId: {} transaction was unsuccessful: Insufficient funds: \n", account.getAccountId());
+            logger.error("\nAccount with accountId: {} transaction was unsuccessful: Insufficient funds: \n", account.getAccountId());
             return;
         }
         account.setBalance(account.getBalance() - amount);
@@ -74,7 +75,7 @@ public class BankService {
         if(updatedAccount == null){
 
             System.out.println("Transaction unsuccessful");
-            logger.info("Account with accountId: {} was unable to complete transactions\n", account.getAccountId());
+            logger.error("Account with accountId: {} was unable to complete transactions\n", account.getAccountId());
 
 
         }
@@ -83,7 +84,7 @@ public class BankService {
             System.out.println("Transaction successful. Thank you for Banking with us."
                     + "\nCurrent Balance: $" + updatedAccount.getBalance());
             logger.info("\nAccount with accountId: {} transaction was successful\n", account.getAccountId());
-
+            bankingRepository.recordTransaction(account, "WITHDRAWAL", amount);
 
         }
 
@@ -119,16 +120,35 @@ public class BankService {
 
     public void transferBetweenAccounts(Account account1, String accountId, double transferAmount) {
 
+        if (transferAmount <= 0) {
+            System.out.println("Transfer amount has be greater than $0.");
+            logger.error("Account with accountId {} Transfer attempt failed due to zero or negative transfer.", account1.getAccountId());
+            return;
+        }
+
         if(transferAmount > account1.getBalance())
         {
             System.out.println("Insufficient funds");
+            logger.error("Account with accountId {} Transfer attempt failed due to insufficient funds.", account1.getAccountId());
             return;
         }
 
         Account account2 = bankingRepository.loginUser(accountId);
+        if (account2 == null) {
+            System.out.println("Account with accountId " + accountId + " does not exist");
+            logger.error("Account with accountId {} Transfer attempt failed due to inexistent target account.", account1.getAccountId());
+            return;
+        }
+
         account1.setBalance(account1.getBalance() - transferAmount);
         account2.setBalance(account2.getBalance() + transferAmount);
         bankingRepository.makeTransfer(account1, account2);
+        logger.info("Account with accountId {} Transaction successful. Transfer sent. $\n" + account1.getBalance(), account1.getAccountId());
+        logger.info("Account with accountId {} Transaction successful. Transfer sent. $\n" + account2.getBalance(), account2.getAccountId());
+
+        bankingRepository.recordTransaction(account1, "TRANSFER_OUT", transferAmount);
+        bankingRepository.recordTransaction(account2, "TRANSFER_IN", transferAmount);
+
     }
 
 
