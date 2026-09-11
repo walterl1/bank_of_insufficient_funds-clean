@@ -10,38 +10,23 @@ public class BankingRepository {
     private final Logger logger = LoggerFactory.getLogger(BankService.class);
     private static final String url = "jdbc:sqlite:BankAccounts.db";
 
-    public void signupUser(Account signupAccount) {
+    public boolean signupUser(Account signupAccount) {
 
 
             String query = "INSERT INTO account(accountId, pin, balance) " +
                     "Values(?, ?, ?)";
 
             try (Connection con = DriverManager.getConnection(url)) {
-
-
                 PreparedStatement p = con.prepareStatement(query);
                 p.setString(1, signupAccount.getAccountId());
                 p.setString(2, signupAccount.getPin());
                 p.setDouble(3, signupAccount.getBalance());
 
-
-
-                int rowsUdated = p.executeUpdate();
-
-                if (rowsUdated == 1) {
-
-                    System.out.println("Signup Successful");
-
-                } else {
-
-                    System.out.println("Signup attempt Unsuccessful. Please Try Again");
-
-                }
-
-
+                return p.executeUpdate() == 1;
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                logger.error("SQLException thrown while signing up user: " + e.getMessage());
             }
+            return false;
 
         }
 

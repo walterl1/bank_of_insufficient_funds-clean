@@ -17,18 +17,26 @@ public class Interface {
         try (Scanner scanner = new Scanner(System.in)) {
             String accountId = "";
             String pin = "";
+            String signupOrLogin = "";
+
+            while (!signupOrLogin.equals("1") && !signupOrLogin.equals("2")) {
+                System.out.println(signupOrLogin);
+                System.out.print("Enter 1 for Registration or 2 for Login: ");
+                signupOrLogin = scanner.nextLine().trim();
+            }
 
 
-            System.out.println("Press 1 for Registration. Press 2 if you have an existing account.");
-            String signupLogin = scanner.nextLine().trim();
+            if(signupOrLogin.equals("1")){
+                System.out.println("Thank you for choosing Bank of Insufficient Funds. Please enter an" +
+                        " account Id to use for logging in.");
+                accountId = scanner.nextLine();
+                System.out.println("\nPlease enter a 6-digit pin number that you will remember.");
+                pin = scanner.nextLine();
 
-            if(signupLogin.equals("1")){
-
-                bankService.signupUser();
+                System.out.println(bankService.signupUser(accountId, pin));
                 logger.info("New account registration.");
 
             }
-
 
             while (true) {
                 System.out.print("Enter your account ID: ");

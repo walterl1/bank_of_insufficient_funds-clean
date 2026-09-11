@@ -11,7 +11,6 @@ public class BankService {
 
     final Logger logger = LoggerFactory.getLogger(BankService.class);
     Scanner scanner = new Scanner(System.in);
-    private Account account = null;
     BankingRepository bankingRepository = new BankingRepository();
 
 
@@ -90,25 +89,13 @@ public class BankService {
 
     }
 
-    public boolean logout() {
-        logger.info("Account with accountId {} successfully logged out", account.getAccountId());
-        account = null;
-        return true;
-    }
 
-
-    public void signupUser() {
-        System.out.println("Thank you for choosing Bank of Insufficient Funds. Please enter an" +
-                " account Id to use for logging in.");
-        String accountId = scanner.nextLine();
-        System.out.println("\nPlease enter a 6-digit pin number that you will remember.");
-        String pinNumber = scanner.nextLine();
-
+    public String signupUser(String accountId, String pinNumber) {
 
         Account signupAccount = new Account(accountId, pinNumber, 0);
-        bankingRepository.signupUser(signupAccount);
+        boolean res = bankingRepository.signupUser(signupAccount);
 
-
+        return res ? "Successfully created account! Please login." : "Failed to create account.";
     }
 
 
