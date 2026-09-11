@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Scanner;
 
+import org.boif.Transaction;
+
 public class BankService {
 
 

@@ -20,7 +20,6 @@ public class Interface {
             String signupOrLogin = "";
 
             while (!signupOrLogin.equals("1") && !signupOrLogin.equals("2")) {
-                System.out.println(signupOrLogin);
                 System.out.print("Enter 1 for Registration or 2 for Login: ");
                 signupOrLogin = scanner.nextLine().trim();
 
@@ -48,6 +47,8 @@ public class Interface {
                 System.out.print("Enter your PIN: ");
                 pin = scanner.nextLine().trim();
 
+                System.out.println();
+
                  Account loggedIn = bankService.validateAccount(accountId, pin);
 
                  if(loggedIn == null){
@@ -57,7 +58,7 @@ public class Interface {
                  } else {
 
                      System.out.println("\nLog in attempt successful.");
-                     System.out.println("\nWelcome.");
+                     System.out.println("\nWelcome!");
 
 
                      break;
@@ -79,10 +80,14 @@ public class Interface {
                 System.out.println("6. Exit\n");
 
 
-                System.out.print("Please select an action (1, 2, 3, 4, 5, 6): \n");
+                System.out.print("Please select an action (1, 2, 3, 4, 5, 6): ");
+
 
                 int action = scanner.nextInt();
                 scanner.nextLine();
+
+                System.out.println();
+
                 Account account1 = bankService.getLoggedInAccount(accountId, pin);
 
                 if(account1.getBalance() < 0){

@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.*;
 
+import org.boif.Transaction;
+
 public class BankingRepository {
     private final Logger logger = LoggerFactory.getLogger(BankService.class);
     private static final String url = "jdbc:sqlite:BankAccounts.db";
