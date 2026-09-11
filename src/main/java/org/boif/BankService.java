@@ -56,6 +56,7 @@ public class BankService {
 
             System.out.println("Transaction successful. Thank you for banking with us."
                     + "\nCurrent Balance: $" + updatedAccount.getBalance());
+            bankingRepository.recordTransaction(account, "DEPOSIT", deposit);
             logger.info("\nAccount with accountId: {} transaction was successful: \n", account.getAccountId());
 
         }
@@ -83,7 +84,7 @@ public class BankService {
             System.out.println("Transaction successful. Thank you for Banking with us."
                     + "\nCurrent Balance: $" + updatedAccount.getBalance());
             logger.info("\nAccount with accountId: {} transaction was successful\n", account.getAccountId());
-
+            bankingRepository.recordTransaction(account, "WITHDRAWAL", amount);
 
         }
 
@@ -144,6 +145,9 @@ public class BankService {
         bankingRepository.makeTransfer(account1, account2);
         logger.info("Account with accountId {} Transaction successful. Transfer sent. $\n" + account1.getBalance(), account1.getAccountId());
         logger.info("Account with accountId {} Transaction successful. Transfer sent. $\n" + account2.getBalance(), account2.getAccountId());
+
+        bankingRepository.recordTransaction(account1, "TRANSFER_OUT", transferAmount);
+        bankingRepository.recordTransaction(account2, "TRANSFER_IN", transferAmount);
 
     }
 
