@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.*;
 
 public class BankingRepository {
     private final Logger logger = LoggerFactory.getLogger(BankService.class);
@@ -207,6 +208,25 @@ public class BankingRepository {
         } catch (SQLException e) {
             logger.error("SQLException thrown while recording transaction: " + e.getMessage());
         }
+    }
+
+    public List<Transaction> getTransactions(Account account) {
+        String query = "SELECT type, amount, createdAt FROM transactions WHERE accountId = " + account.getAccountId();
+        List<Transaction> transactions = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url); Statement s = connection.createStatement(); ResultSet rs = s.executeQuery(query)) {
+            while (rs.next()) {
+                String type = rs.getString(1);
+                double amount = rs.getDouble(2);
+                Time ts = rs.getTime(3);
+
+                Transaction t = new Transaction(type, amount, ts);
+                transactions.add(t);
+            }
+        } catch (SQLException e) {
+            logger.error("SQLException thrown while fetching transaction history: " + e.getMessage());
+        }
+
+        return transactions;
     }
 }
 

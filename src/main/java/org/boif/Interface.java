@@ -20,7 +20,7 @@ public class Interface {
 
 
             System.out.println("Press 1 for Registration. Press 2 if you have an existing account.");
-            String signupLogin = scanner.nextLine();
+            String signupLogin = scanner.nextLine().trim();
 
             if(signupLogin.equals("1")){
 
@@ -32,9 +32,9 @@ public class Interface {
 
             while (true) {
                 System.out.print("Enter your account ID: ");
-                accountId = scanner.nextLine();
+                accountId = scanner.nextLine().trim();
                 System.out.print("Enter your PIN: ");
-                pin = scanner.nextLine();
+                pin = scanner.nextLine().trim();
 
                  Account loggedIn = bankService.validateAccount(accountId, pin);
 
@@ -63,10 +63,11 @@ public class Interface {
                 System.out.println("2. Withdraw");
                 System.out.println("3. Transfer");
                 System.out.println("4. Check Balance");
-                System.out.println("5. Exit\n");
+                System.out.println("5. View Transactions History");
+                System.out.println("6. Exit\n");
 
 
-                System.out.print("Please select an action (1, 2, 3, 4, 5): \n");
+                System.out.print("Please select an action (1, 2, 3, 4, 5, 6): \n");
 
                 int action = scanner.nextInt();
                 scanner.nextLine();
@@ -114,6 +115,11 @@ public class Interface {
                         break;
                     }
                     case 5: {
+                        System.out.println("Your transactions history: ");
+                        System.out.println(bankService.getTransactionHistory(account1));
+                        break;
+                    }
+                    case 6: {
                         System.out.println("\nThank you for using Bank of Insufficient Funds.");
                         on = false;
                         break;

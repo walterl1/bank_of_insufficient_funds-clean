@@ -3,7 +3,7 @@ package org.boif;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import java.util.List;
 import java.util.Scanner;
 
 public class BankService {
@@ -151,5 +151,18 @@ public class BankService {
 
     }
 
+    public String getTransactionHistory(Account account) {
+        StringBuilder sb = new StringBuilder();
+        List<Transaction> transactions = bankingRepository.getTransactions(account);
+        if (transactions.size() == 0) {
+            return "No transactions found.\n";
+        }
+
+        for (int i = 0; i < transactions.size(); i++) {
+            sb.append(i + 1 + ": " + transactions.get(i).toString() + "\n");
+        }
+
+        return sb.toString();
+    }
 
 }
