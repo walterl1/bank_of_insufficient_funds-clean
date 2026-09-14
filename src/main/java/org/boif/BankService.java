@@ -18,6 +18,32 @@ public class BankService {
     BankingRepository bankingRepository = new BankingRepository();
 
 
+    public String validateAccountId(String accountId) {
+        if (accountId == null || accountId.isBlank()) {
+            return "Account ID cannot be empty.";
+        }
+        accountId = accountId.trim();
+        if (accountId.length() < 4 || accountId.length() > 20) {
+            return "Account ID must be between 4 and 20 characters.";
+        }
+        if (!accountId.matches("^[a-zA-Z0-9_]+$")) {
+            return "Account ID may only contain letters, numbers, and underscores.";
+        }
+        return null; // null means valid
+    }
+
+    public String validatePin(String pin) {
+        if (pin == null || pin.isBlank()) {
+            return "PIN cannot be empty.";
+        }
+        pin = pin.trim();
+        if (!pin.matches("^\\d{6}$")) {
+            return "PIN must be exactly 6 digits (0-9).";
+        }
+        return null; // null means valid
+    }
+
+
     public Account validateAccount(String accountId, String pin) {
 
         Account account1 = bankingRepository.loginUser(accountId, pin);
@@ -33,24 +59,60 @@ public class BankService {
 
     }
 
+    public String validateCredentials(String accountId, String pin) {
+        String idErr = validateAccountId(accountId);
+        if (idErr != null) return idErr;
+
+        String pinErr = validatePin(pin);
+        if (pinErr != null) return pinErr;
+
+        return null;
+    }
+
+    public String promptForAccountId() {
+        while (true) {
+            System.out.print("Enter Account ID: ");
+            String input = scanner.nextLine();
+            String error = validateAccountId(input);
+            if (error == null) {
+                return input.trim().toLowerCase();
+            }
+            System.out.println("Invalid input: " + error);
+        }
+    }
+
+    public String promptForPin() {
+        while (true) {
+            System.out.print("Enter 6-digit PIN: ");
+            String input = scanner.nextLine();
+            String error = validatePin(input);
+            if (error == null) {
+                return input.trim();
+            }
+            System.out.println("Invalid input: " + error);
+        }
+    }
+
     public String signupUser(String accountId, String pinNumber) throws SQLException {
+        // 1. Validate format first
+        String validationError = validateCredentials(accountId, pinNumber);
+        if (validationError != null) {
+            return validationError;
+        }
 
+        // 2. Normalize
+        accountId = accountId.trim().toLowerCase();
+        pinNumber = pinNumber.trim();
+
+        // 3. Check for existing account
         List<Account> allAccounts = bankingRepository.getAllAccounts();
-
-        for(int i = 0; i < allAccounts.size(); i++){
-
-            if(Objects.equals(allAccounts.get(0).getAccountId(), accountId))
-                return "Username already exist";
+        for (int i = 0; i < allAccounts.size(); i++) {
+            if (Objects.equals(allAccounts.get(i).getAccountId(), accountId)) {
+                return "Username already exists";
+            }
         }
 
-        if(pinNumber.length() != 6){
-
-            return "pin has to be exactly 6 characters";
-        }
-
-
-        pinNumber.toLowerCase().trim();
-        accountId.toLowerCase().trim();
+        // 4. Persist
         Account signupAccount = new Account(accountId, pinNumber, 0);
         boolean res = bankingRepository.signupUser(signupAccount);
         if (res) {
