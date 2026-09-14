@@ -3,16 +3,45 @@ package org.boif;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
+
+import org.boif.Transaction;
 
 public class BankService {
 
 
     final Logger logger = LoggerFactory.getLogger(BankService.class);
     Scanner scanner = new Scanner(System.in);
-    private Account account = null;
     BankingRepository bankingRepository = new BankingRepository();
+
+
+    public String validateAccountId(String accountId) {
+        if (accountId == null || accountId.isBlank()) {
+            return "Account ID cannot be empty.";
+        }
+        accountId = accountId.trim();
+        if (accountId.length() < 4 || accountId.length() > 20) {
+            return "Account ID must be between 4 and 20 characters.";
+        }
+        if (!accountId.matches("^[a-zA-Z0-9_]+$")) {
+            return "Account ID may only contain letters, numbers, and underscores.";
+        }
+        return null; // null means valid
+    }
+
+    public String validatePin(String pin) {
+        if (pin == null || pin.isBlank()) {
+            return "PIN cannot be empty.";
+        }
+        pin = pin.trim();
+        if (!pin.matches("^\\d{6}$")) {
+            return "PIN must be exactly 6 digits (0-9).";
+        }
+        return null; // null means valid
+    }
 
 
     public Account validateAccount(String accountId, String pin) {
@@ -30,126 +59,194 @@ public class BankService {
 
     }
 
+    public String validateCredentials(String accountId, String pin) {
+        String idErr = validateAccountId(accountId);
+        if (idErr != null) return idErr;
+
+        String pinErr = validatePin(pin);
+        if (pinErr != null) return pinErr;
+
+        return null;
+    }
+
+    public String promptForAccountId() {
+        while (true) {
+            System.out.print("Enter Account ID: ");
+            String input = scanner.nextLine();
+            String error = validateAccountId(input);
+            if (error == null) {
+                return input.trim().toLowerCase();
+            }
+            System.out.println("Invalid input: " + error);
+        }
+    }
+
+    public String promptForPin() {
+        while (true) {
+            System.out.print("Enter 6-digit PIN: ");
+            String input = scanner.nextLine();
+            String error = validatePin(input);
+            if (error == null) {
+                return input.trim();
+            }
+            System.out.println("Invalid input: " + error);
+        }
+    }
+
+    public String signupUser(String accountId, String pinNumber) throws SQLException {
+        // 1. Validate format first
+        String validationError = validateCredentials(accountId, pinNumber);
+        if (validationError != null) {
+            return validationError;
+        }
+
+        // 2. Normalize
+        accountId = accountId.trim().toLowerCase();
+        pinNumber = pinNumber.trim();
+
+        // 3. Check for existing account
+        List<Account> allAccounts = bankingRepository.getAllAccounts();
+        for (int i = 0; i < allAccounts.size(); i++) {
+            if (Objects.equals(allAccounts.get(i).getAccountId(), accountId)) {
+                return "Username already exists";
+            }
+        }
+
+        // 4. Persist
+        Account signupAccount = new Account(accountId, pinNumber, 0);
+        boolean res = bankingRepository.signupUser(signupAccount);
+        if (res) {
+            logger.info("Successfully created account with accountId " + accountId + "!");
+            return "Successfully created account!";
+        } else {
+            logger.error("Failed to create account with accountId " + accountId + ".");
+            return "Failed to create account.";
+        }
+    }
+
+    public Account getLoggedInAccount(String accountId, String pin) {
+
+        Account account1 = bankingRepository.loginUser(accountId, pin);
+        return account1;
+    }
+
     public double getBalance(Account account) {
 
         return account.getBalance();
 
     }
-    public void depositfunds(Account account, double deposit){
+
+    public String depositfunds(Account account, double deposit){
+
         if(deposit<1){
 
-            System.out.println("Deposit amount has to be atleast $1.");
+
             logger.error("Account with accountId :{} was unable to complete transaction due to a lack of funds.\n", account.getAccountId());
-            return;
+            return "Deposit amount has to be more than $1.00";
         }
 
         account.setBalance(account.getBalance() + deposit);
         Account updatedAccount = bankingRepository.depositFunds(account);
         if(updatedAccount == null){
 
-            System.out.println("Transaction unsuccessful");
             logger.error("Account with accountId :{} was unable to complete transactions\n", account.getAccountId());
+            return "Transaction unsuccessful";
 
 
         }
         else{
 
-            System.out.println("Transaction successful. Thank you for banking with us."
-                    + "\nCurrent Balance: $" + updatedAccount.getBalance());
+
             bankingRepository.recordTransaction(account, "DEPOSIT", deposit);
             logger.info("\nAccount with accountId: {} transaction was successful: \n", account.getAccountId());
+            return "Transaction successful. Thank you for banking with us."
+                    + "\nCurrent Balance: $" + updatedAccount.getBalance();
 
         }
 
 
     }
-    public void withdraw(Account account, double amount) {
+
+    public String withdraw(Account account, double amount) {
         if (amount > getBalance(account)) {
 
-            System.out.println("Insufficient Funds");
             logger.error("\nAccount with accountId: {} transaction was unsuccessful: Insufficient funds: \n", account.getAccountId());
-            return;
+            return "insufficient funds\n";
         }
         account.setBalance(account.getBalance() - amount);
         Account updatedAccount = bankingRepository.depositFunds(account);
         if(updatedAccount == null){
 
-            System.out.println("Transaction unsuccessful");
             logger.error("Account with accountId: {} was unable to complete transactions\n", account.getAccountId());
+            return "Transaction unsuccessful\n";
 
 
         }
         else{
-
-            System.out.println("Transaction successful. Thank you for Banking with us."
-                    + "\nCurrent Balance: $" + updatedAccount.getBalance());
             logger.info("\nAccount with accountId: {} transaction was successful\n", account.getAccountId());
             bankingRepository.recordTransaction(account, "WITHDRAWAL", amount);
-
+            return  "Transaction successful. Thank you for Banking with us."
+                    + "\nCurrent Balance: $" + updatedAccount.getBalance();
         }
 
     }
 
-    public boolean logout() {
-        logger.info("Account with accountId {} successfully logged out", account.getAccountId());
-        account = null;
-        return true;
-    }
-
-
-    public void signupUser() {
-        System.out.println("Thank you for choosing Bank of Insufficient Funds. Please enter an" +
-                " account Id to use for logging in.");
-        String accountId = scanner.nextLine();
-        System.out.println("\nPlease enter a 6-digit pin number that you will remember.");
-        String pinNumber = scanner.nextLine();
-
-
-        Account signupAccount = new Account(accountId, pinNumber, 0);
-        bankingRepository.signupUser(signupAccount);
-
-
-    }
-
-
-    public Account getLoggedInAccount(String accountId, String pin) {
-
-       Account account1 = bankingRepository.loginUser(accountId, pin);
-       return account1;
-    }
-
-    public void transferBetweenAccounts(Account account1, String accountId, double transferAmount) {
+    public String transferBetweenAccounts(Account account1, String accountId, double transferAmount) {
 
         if (transferAmount <= 0) {
-            System.out.println("Transfer amount has be greater than $0.");
             logger.error("Account with accountId {} Transfer attempt failed due to zero or negative transfer.", account1.getAccountId());
-            return;
+            return "Transfer amount has to be greater than $0";
         }
 
         if(transferAmount > account1.getBalance())
         {
-            System.out.println("Insufficient funds");
             logger.error("Account with accountId {} Transfer attempt failed due to insufficient funds.", account1.getAccountId());
-            return;
+            return "Insufficient funds \n";
+        }
+
+        if (accountId.equals(account1.getAccountId())) {
+            logger.error("Account with accountId {} Transfer attempt failed due to insufficient funds.", account1.getAccountId());
+            return "Cannot transfer to the same accountId";
         }
 
         Account account2 = bankingRepository.loginUser(accountId);
         if (account2 == null) {
-            System.out.println("Account with accountId " + accountId + " does not exist");
             logger.error("Account with accountId {} Transfer attempt failed due to inexistent target account.", account1.getAccountId());
-            return;
+            return "Account with accountId " + accountId + " does not exist";
         }
 
         account1.setBalance(account1.getBalance() - transferAmount);
         account2.setBalance(account2.getBalance() + transferAmount);
-        bankingRepository.makeTransfer(account1, account2);
+
+        boolean res = bankingRepository.makeTransfer(account1, account2);
+        if (!res) {
+            account1.setBalance(account1.getBalance() + transferAmount);
+            logger.error("Account with accountId {} Transfer attempt failed.", account1.getAccountId());
+            return "Failed to transfer balance.";
+        }
+
         logger.info("Account with accountId {} Transaction successful. Transfer sent. $\n" + account1.getBalance(), account1.getAccountId());
         logger.info("Account with accountId {} Transaction successful. Transfer sent. $\n" + account2.getBalance(), account2.getAccountId());
 
         bankingRepository.recordTransaction(account1, "TRANSFER_OUT", transferAmount);
         bankingRepository.recordTransaction(account2, "TRANSFER_IN", transferAmount);
-
+        return "Please allow one business day for transfer to complete.";
     }
+
+    public String getTransactionHistory(Account account) {
+        StringBuilder sb = new StringBuilder();
+        List<Transaction> transactions = bankingRepository.getTransactions(account);
+        if (transactions.size() == 0) {
+            return "No transactions found.\n";
+        }
+
+        for (int i = 0; i < transactions.size(); i++) {
+            sb.append(i + 1 + ": " + transactions.get(i).toString() + "\n");
+        }
+
+        return sb.toString();
+    }
+
 
 
 }
