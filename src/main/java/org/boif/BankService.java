@@ -142,6 +142,11 @@ public class BankService {
             return "Insufficient funds \n";
         }
 
+        if (accountId.equals(account1.getAccountId())) {
+            logger.error("Account with accountId {} Transfer attempt failed due to insufficient funds.", account1.getAccountId());
+            return "Cannot transfer to the same accountId";
+        }
+
         Account account2 = bankingRepository.loginUser(accountId);
         if (account2 == null) {
             logger.error("Account with accountId {} Transfer attempt failed due to inexistent target account.", account1.getAccountId());
@@ -150,7 +155,14 @@ public class BankService {
 
         account1.setBalance(account1.getBalance() - transferAmount);
         account2.setBalance(account2.getBalance() + transferAmount);
-        bankingRepository.makeTransfer(account1, account2);
+
+        boolean res = bankingRepository.makeTransfer(account1, account2);
+        if (!res) {
+            account1.setBalance(account1.getBalance() + transferAmount);
+            logger.error("Account with accountId {} Transfer attempt failed.", account1.getAccountId());
+            return "Failed to transfer balance.";
+        }
+
         logger.info("Account with accountId {} Transaction successful. Transfer sent. $\n" + account1.getBalance(), account1.getAccountId());
         logger.info("Account with accountId {} Transaction successful. Transfer sent. $\n" + account2.getBalance(), account2.getAccountId());
 
