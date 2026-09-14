@@ -8,18 +8,29 @@ import java.util.*;
 
 public class BankingRepository {
     private final Logger logger = LoggerFactory.getLogger(BankService.class);
-    private static final String url = "jdbc:sqlite:BankAccounts.db";
+    private final String url;
+    public BankingRepository() { this("jdbc:sqlite:BankAccounts.db");}
+    public BankingRepository(String url) { this.url = url; }
+
+    // private static final String url = "jdbc:sqlite:BankAccounts.db";
 
     public boolean signupUser(Account signupAccount) {
 
-
-            String query = "INSERT INTO account(accountId, pin, balance) " +
+        String checkQuery = "SELECT COUNT(*) FROM account WHERE accountId = ?";
+        String insertQuery = "INSERT INTO account(accountId, pin, balance) " +
                     "Values(?, ?, ?)";
 
-            try (Connection con = DriverManager.getConnection(url)) {
+        try (Connection con = DriverManager.getConnection(url)) {
 
+                PreparedStatement checkStmt = con.prepareStatement(checkQuery);
+                checkStmt.setString(1, signupAccount.getAccountId());
+                ResultSet checkResult = checkStmt.executeQuery();
+                if (checkResult.next() && checkResult.getInt(1) > 0) {
+                    System.out.println("Signup attempt Unsuccessful. Account ID already exists.");
+                    return false;
+                }
 
-                PreparedStatement p = con.prepareStatement(query);
+                PreparedStatement p = con.prepareStatement(insertQuery);
                 p.setString(1, signupAccount.getAccountId());
                 p.setString(2, signupAccount.getPin());
                 p.setDouble(3, signupAccount.getBalance());
@@ -264,4 +275,3 @@ public class BankingRepository {
     }
 
 }
-
