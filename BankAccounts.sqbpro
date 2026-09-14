@@ -1,1 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/willi/OneDrive/Desktop/Learning/Java/Revatuure/BankAccounts.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="150"/><column_width id="3" width="1088"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,7:mainaccount"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">select * from account;</sql><current_tab id="0"/></tab_sql></sqlb_project>
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/willi/OneDrive/Desktop/Learning/Java/Revatuure/BankAccounts.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure query browser pragmas" current="1"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="150"/><column_width id="3" width="1655"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,7:mainaccount"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">select * from transactions;
+select * from account</sql><sql name="createTable.sql">drop table if EXISTS account;
+CREATE TABLE account(
+
+userId INTEGER PRIMARY KEY AUTOINCREMENT,
+accountId TEXT,
+pin TEXT,
+balance REAL,
+createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+drop table if EXISTS transactions;
+CREATE TABLE transactions(
+
+transactionId INTEGER PRIMARY KEY AUTOINCREMENT,
+accountId TEXT,
+amount REAL,
+type TEXT,
+createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+);</sql><current_tab id="1"/></tab_sql></sqlb_project>

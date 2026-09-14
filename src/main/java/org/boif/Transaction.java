@@ -1,13 +1,14 @@
 package org.boif;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 
 public class Transaction {
     private String type;
     private double amount;
-    private Time ts;
+    private Timestamp ts;
 
-    public Transaction(String type, double amount, Time ts) {
+    public Transaction(String type, double amount, Timestamp ts) {
         this.type = type;
         this.amount = amount;
         this.ts = ts;

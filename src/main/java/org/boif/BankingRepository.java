@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.*;
 
-import org.boif.Transaction;
-
 public class BankingRepository {
     private final Logger logger = LoggerFactory.getLogger(BankService.class);
     private static final String url = "jdbc:sqlite:BankAccounts.db";
@@ -19,19 +17,35 @@ public class BankingRepository {
                     "Values(?, ?, ?)";
 
             try (Connection con = DriverManager.getConnection(url)) {
+
+
                 PreparedStatement p = con.prepareStatement(query);
                 p.setString(1, signupAccount.getAccountId());
                 p.setString(2, signupAccount.getPin());
                 p.setDouble(3, signupAccount.getBalance());
 
-                return p.executeUpdate() == 1;
+
+
+                int rowsUdated = p.executeUpdate();
+
+                if (rowsUdated == 1) {
+
+                    System.out.println("Signup Successful");
+                    return true;
+
+                } else {
+
+                    System.out.println("Signup attempt Unsuccessful. Please Try Again");
+                    return false;
+
+                }
+
+
             } catch (SQLException e) {
-                logger.error("SQLException thrown while signing up user: " + e.getMessage());
+                e.printStackTrace();
             }
-            return false;
-
+                return false;
         }
-
 
     public Account loginUser(String accountId, String pin){
 
@@ -102,6 +116,34 @@ public class BankingRepository {
 
     }
 
+    public List<Account> getAllAccounts() {
+
+        List<Account> allAccounts = new ArrayList<>();
+
+        String query = "SELECT accountId FROM account";
+        List<Transaction> transactions = new ArrayList<>();
+
+        try (Connection connection = DriverManager.getConnection(url)){
+
+            PreparedStatement ps = connection.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+
+                Account account = new Account( rs.getString("accountId"));
+                allAccounts.add(account);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error("SQLException thrown while fetching all accounts: " + e.getMessage());
+
+        }
+        return allAccounts;
+
+
+    }
+
     public Account depositFunds(Account account) {
 
             String query2 = "UPDATE account set balance = ? WHERE userId = ?";
@@ -140,8 +182,7 @@ public class BankingRepository {
 
 
 
-        try{
-            Connection con = DriverManager.getConnection(url);
+        try (Connection con = DriverManager.getConnection(url)){
 
             PreparedStatement ps = con.prepareStatement(query2);
             ps.setDouble(1, account1.getBalance());
@@ -186,7 +227,10 @@ public class BankingRepository {
 
     public void recordTransaction(Account account, String type, double amount) {
         String query = "INSERT INTO transactions (accountId, type, amount) VALUES (?, ?, ?)";
-        try (Connection connection = DriverManager.getConnection(url); PreparedStatement ps = connection.prepareStatement(query)) {
+
+
+        try (Connection connection = DriverManager.getConnection(url)){
+            PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, account.getAccountId());
             ps.setString(2, type);
             ps.setDouble(3, amount);
@@ -198,22 +242,29 @@ public class BankingRepository {
     }
 
     public List<Transaction> getTransactions(Account account) {
-        String query = "SELECT type, amount, createdAt FROM transactions WHERE accountId = '" + account.getAccountId() + "'";
+
+        String query = "SELECT type, amount, createdAt FROM transactions WHERE accountId = ?";
         List<Transaction> transactions = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(url); Statement s = connection.createStatement(); ResultSet rs = s.executeQuery(query)) {
+
+        try (Connection connection = DriverManager.getConnection(url)){
+
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, account.getAccountId());
+
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                String type = rs.getString(1);
-                double amount = rs.getDouble(2);
-                Time ts = rs.getTime(3);
 
-                Transaction t = new Transaction(type, amount, ts);
+                Transaction t = new Transaction(rs.getString("type"), rs.getDouble("amount"), rs.getTimestamp("createdAt"));
                 transactions.add(t);
-            }
-        } catch (SQLException e) {
-            logger.error("SQLException thrown while fetching transaction history: " + e.getMessage());
-        }
 
+            }
+            } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error("SQLException thrown while fetching transaction history: " + e.getMessage());
+
+        }
         return transactions;
     }
+
 }
 

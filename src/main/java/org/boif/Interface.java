@@ -3,6 +3,7 @@ package org.boif;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Interface {
@@ -12,7 +13,7 @@ public class Interface {
         final Logger logger = LoggerFactory.getLogger(BankService.class);
 
 
-        System.out.println("Welcome to Bank of Insufficient Funds");
+        System.out.println("\nWelcome to Bank of Insufficient Funds");
 
         try (Scanner scanner = new Scanner(System.in)) {
             String accountId = "";
@@ -24,18 +25,18 @@ public class Interface {
                 signupOrLogin = scanner.nextLine().trim();
 
                 if(signupOrLogin.equals("1")){
-                    System.out.println("Thank you for choosing Bank of Insufficient Funds. Please enter an" +
+                    System.out.println("\nThank you for choosing Bank of Insufficient Funds. Please enter an" +
                             " account Id to use for logging in.");
                     accountId = scanner.nextLine();
                     System.out.println("\nPlease enter a 6-digit pin number that you will remember.");
                     pin = scanner.nextLine();
 
                     String result = bankService.signupUser(accountId, pin);
-                    System.out.println(result);
+                    System.out.println("\n" + result);
 
                     signupOrLogin = "";
                 } else if (signupOrLogin.equals("2")) {
-                    break; 
+                    break;
                 }
             }
 
@@ -53,7 +54,21 @@ public class Interface {
 
                  if(loggedIn == null){
 
-                     System.out.println("Invalid credentials. Please try again.");
+                     System.out.println("Invalid credentials. Press enter to try again or press 1 for registration.");
+                     signupOrLogin = scanner.nextLine();
+
+                     if(signupOrLogin.equals("1")) {
+                         System.out.println("Thank you for choosing Bank of Insufficient Funds. Please enter an" +
+                                 " account Id to use for logging in.");
+                         accountId = scanner.nextLine();
+                         System.out.println("\nPlease enter a 6-digit pin number that you will remember.");
+                         pin = scanner.nextLine();
+                         signupOrLogin = "";
+                         String result = bankService.signupUser(accountId, pin);
+                         System.out.println(result);
+
+
+                     }
 
                  } else {
 
@@ -104,7 +119,8 @@ public class Interface {
                         System.out.println("Please enter the amount to Deposit:  ");
                         String deposit = scanner.nextLine();
                         double depositAmount = Double.parseDouble(deposit);
-                        bankService.depositfunds(account1, depositAmount);
+                        String depositMessage = bankService.depositfunds(account1, depositAmount);
+                        System.out.println(depositMessage);
                         break;
 
 
@@ -114,7 +130,8 @@ public class Interface {
                         System.out.println("Please enter the amount to Withdraw:  ");
                         String withdraw = scanner.nextLine();
                         double wd = Double.parseDouble(withdraw);
-                        bankService.withdraw(account1, wd);
+                        String withdrawalMessage = bankService.withdraw(account1, wd);
+                        System.out.println(withdrawalMessage);
                         break;
                     }
                     case 3: {
@@ -124,8 +141,9 @@ public class Interface {
                         double transferAmount = Double.parseDouble(transfer);
                         System.out.println("\nPlease enter the account Id you wish to make a transfer to:  ");
                         String accounId = scanner.nextLine();
-                        bankService.transferBetweenAccounts(account1, accounId, transferAmount);
-                        break;
+                         String transferMessage = bankService.transferBetweenAccounts(account1, accounId, transferAmount);
+                        System.out.println(transferMessage);
+                         break;
                     }
                     case 4: {
                         System.out.println("\nYour total balance is: " + bankService.getBalance(account1));
@@ -149,6 +167,8 @@ public class Interface {
                 }
 
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
