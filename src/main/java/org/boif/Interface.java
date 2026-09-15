@@ -196,8 +196,9 @@ public class Interface {
                 }
 
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | RuntimeException e) {
+            logger.error("Banking service unavailable", e);
+            System.out.println("Service unavailable. Please try again later.");
         }
     }
 }

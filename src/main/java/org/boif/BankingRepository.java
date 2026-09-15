@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.*;
 
 public class BankingRepository {
-    private final Logger logger = LoggerFactory.getLogger(BankService.class);
+    private final Logger logger = LoggerFactory.getLogger(BankingRepository.class);
     private final String url;
     public BankingRepository() { this("jdbc:sqlite:BankAccounts.db");}
     public BankingRepository(String url) { this.url = url; }
@@ -143,7 +143,7 @@ public class BankingRepository {
 
             }
         } catch (SQLException e) {
-            logger.error("SQLException thrown while fetching all accounts: " + e.getMessage());
+            logger.error("SQLException thrown while fetching all accounts", e);
 
         }
         return allAccounts;
@@ -238,7 +238,7 @@ public class BankingRepository {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            logger.error("SQLException thrown while recording transaction: " + e.getMessage());
+            logger.error("SQLException thrown while recording transaction", e);
         }
     }
 
@@ -260,7 +260,7 @@ public class BankingRepository {
 
             }
             } catch (SQLException e) {
-            logger.error("SQLException thrown while fetching transaction history: " + e.getMessage());
+            logger.error("SQLException thrown while fetching transaction history", e);
 
         }
         return transactions;
