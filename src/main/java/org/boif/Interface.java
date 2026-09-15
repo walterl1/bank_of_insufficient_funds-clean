@@ -121,11 +121,9 @@ public class Interface {
                         while(true) {
                             try {
 
-                                System.out.println("\nYou total balance is: " + account1.getBalance());
+                                System.out.println("You total balance is: " + account1.getBalance());
                                 System.out.println("Please enter the amount to Deposit (or type 'back' to go back):  ");
 
-                                System.out.println("Your total balance is: " + account1.getBalance());
-                                System.out.print("Please enter the amount to deposit: ");
 
                                 String deposit = scanner.nextLine();
                                 if(deposit.equalsIgnoreCase("back")){
@@ -138,7 +136,7 @@ public class Interface {
                                     break;
                                 }
                             }catch (NumberFormatException exception){
-                                System.out.println("Please enter numbers only for deposit. Example: 100");
+                                System.out.println("\nPlease enter numbers only for deposit. Example: 100");
                             }
                         }
                         break;
@@ -147,11 +145,9 @@ public class Interface {
                         while(true) {
                             try {
 
-                                System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
+                                System.out.println("You total balance is: " + bankService.getBalance(account1));
                                 System.out.println("Please enter the amount to Withdraw (or type 'back' to go back):  ");
 
-                                System.out.println("Your total balance is: " + bankService.getBalance(account1));
-                                System.out.println("Please enter the amount to Withdraw:  ");
 
                                 String withdraw = scanner.nextLine();
                                 if(withdraw.equalsIgnoreCase("back")){
@@ -164,7 +160,7 @@ public class Interface {
                                     break;
                                 }
                             } catch (NumberFormatException exception) {
-                                System.out.println("Please enter numbers only for withdrawal. Example: 100");
+                                System.out.println("\nPlease enter numbers only for withdrawal. Example: 100");
                             }
                         }
                         break;
@@ -174,11 +170,9 @@ public class Interface {
                         while(true) {
                             try {
 
-                                System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
-                                System.out.println("\nPlease enter the amount to Transfer (or type 'back' to go back):  ");
+                                System.out.println("You total balance is: " + bankService.getBalance(account1));
+                                System.out.println("Please enter the amount to Transfer (or type 'back' to go back):  ");
 
-                                System.out.println("Your total balance is: " + bankService.getBalance(account1));
-                                System.out.println("Please enter the amount to Transfer:  ");
 
                                 String transfer = scanner.nextLine();
                                 if(transfer.equalsIgnoreCase("back")){
@@ -187,10 +181,9 @@ public class Interface {
                                 double transferAmount = Double.parseDouble(transfer);
 
 
-                                System.out.println("\nPlease enter the account Id you wish to make a transfer to (or type back to go back):  ");
+                                System.out.println("Please enter the account Id you wish to make a transfer to (or type back to go back):  ");
 
 
-                                System.out.println("Please enter the account Id you wish to make a transfer to:  ");
 
                                 String accounId = scanner.nextLine();
                                 if(accounId.equalsIgnoreCase("back")){
@@ -202,7 +195,7 @@ public class Interface {
                                     break;
                                 }
                             }catch (NumberFormatException exception){
-                                System.out.println("Please enter numbers only for the transfer. Example: 100");
+                                System.out.println("\nPlease enter numbers only for the transfer. Example: 100");
                             }
                         }
                         break;
