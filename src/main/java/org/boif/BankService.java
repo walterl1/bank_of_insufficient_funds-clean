@@ -49,11 +49,11 @@ public class BankService {
         Account account1 = bankingRepository.loginUser(accountId, pin);
 
         if(account1 != null){
-
+             logger.info("User successfully logged in: {}", accountId);
              return  account1;
 
         }else{
-
+            logger.error("Incorrect PIN or account ID entered for: {}", accountId);
             return null;
         }
 
@@ -93,7 +93,7 @@ public class BankService {
         }
     }
 
-    public String signupUser(String accountId, String pinNumber) throws SQLException {
+    public String signupUser(String accountId, String pinNumber) {
         // 1. Validate format first
         String validationError = validateCredentials(accountId, pinNumber);
         if (validationError != null) {
@@ -141,7 +141,7 @@ public class BankService {
         if(deposit<1){
 
 
-            logger.error("Account with accountId :{} was unable to complete transaction due to a lack of funds.\n", account.getAccountId());
+            logger.error("Account with accountId :{} was unable to complete transaction due to a lack of funds.", account.getAccountId());
             return "Deposit amount has to be at least $1\n";
         }
 
@@ -149,8 +149,8 @@ public class BankService {
         Account updatedAccount = bankingRepository.depositFunds(account);
         if(updatedAccount == null){
 
-            logger.error("Account with accountId :{} was unable to complete transactions\n", account.getAccountId());
-            return "Transaction unsuccessful";
+            logger.error("Account with accountId :{} was unable to complete transactions", account.getAccountId());
+            return "Deposit unsuccessful";
 
 
         }
@@ -158,8 +158,8 @@ public class BankService {
 
 
             bankingRepository.recordTransaction(account, "DEPOSIT", deposit);
-            logger.info("\nAccount with accountId: {} transaction was successful: \n", account.getAccountId());
-            return "Transaction successful. Thank you for banking with us."
+            logger.info("Account with accountId: {} transaction was successful", account.getAccountId());
+            return "Deposit successful. Thank you for banking with us."
                     + "\nCurrent Balance: $" + updatedAccount.getBalance();
 
         }
@@ -175,20 +175,20 @@ public class BankService {
 
         if (amount > getBalance(account)) {
 
-            logger.error("\nAccount with accountId: {} transaction was unsuccessful: Insufficient funds: \n", account.getAccountId());
+            logger.error("Account with accountId: {} transaction was unsuccessful: Insufficient funds", account.getAccountId());
             return "Insufficient funds\n";
         }
         account.setBalance(account.getBalance() - amount);
         Account updatedAccount = bankingRepository.depositFunds(account);
         if(updatedAccount == null){
 
-            logger.error("Account with accountId: {} was unable to complete transactions\n", account.getAccountId());
+            logger.error("Account with accountId: {} was unable to complete transactions", account.getAccountId());
             return "Transaction unsuccessful\n";
 
 
         }
         else{
-            logger.info("\nAccount with accountId: {} transaction was successful\n", account.getAccountId());
+            logger.info("Account with accountId: {} transaction was successful", account.getAccountId());
             bankingRepository.recordTransaction(account, "WITHDRAWAL", amount);
             return  "Transaction successful. Thank you for Banking with us."
                     + "\nCurrent Balance: $" + updatedAccount.getBalance();
@@ -230,8 +230,8 @@ public class BankService {
             return "Failed to transfer balance.";
         }
 
-        logger.info("Account with accountId {} Transaction successful. Transfer sent. $\n" + account1.getBalance(), account1.getAccountId());
-        logger.info("Account with accountId {} Transaction successful. Transfer sent. $\n" + account2.getBalance(), account2.getAccountId());
+        logger.info("Account with accountId {} Transaction successful. Transfer sent. New balance: {}", account1.getAccountId(), account1.getBalance());
+        logger.info("Account with accountId {} Transaction successful. Transfer received. New balance: {}", account2.getAccountId(), account2.getBalance());
 
         bankingRepository.recordTransaction(account1, "TRANSFER_OUT", transferAmount);
         bankingRepository.recordTransaction(account2, "TRANSFER_IN", transferAmount);

@@ -82,10 +82,9 @@ public class Interface {
             }
 
 
-                System.out.println();
-
             boolean on = true;
             while(on) {
+                System.out.println();
                 System.out.println("Actions:\n");
                 System.out.println("1. Deposit");
                 System.out.println("2. Withdraw");
@@ -117,13 +116,13 @@ public class Interface {
                     case 1: {
                         while(true) {
                             try {
-                                System.out.println("\nYou total balance is: " + account1.getBalance());
-                                System.out.println("Please enter the amount to Deposit:  ");
+                                System.out.println("Your total balance is: " + account1.getBalance());
+                                System.out.print("Please enter the amount to deposit: ");
                                 String deposit = scanner.nextLine();
                                 double depositAmount = Double.parseDouble(deposit);
                                 String depositMessage = bankService.depositfunds(account1, depositAmount);
                                 System.out.println(depositMessage);
-                                if (depositMessage.contains("Transaction successful.")) {
+                                if (depositMessage.contains("successful.")) {
                                     break;
                                 }
                             }catch (NumberFormatException exception){
@@ -135,7 +134,7 @@ public class Interface {
                     case 2: {
                         while(true) {
                             try {
-                                System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
+                                System.out.println("Your total balance is: " + bankService.getBalance(account1));
                                 System.out.println("Please enter the amount to Withdraw:  ");
                                 String withdraw = scanner.nextLine();
                                 double wd = Double.parseDouble(withdraw);
@@ -154,13 +153,13 @@ public class Interface {
                     case 3: {
                         while(true) {
                             try {
-                                System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
-                                System.out.println("\nPlease enter the amount to Transfer:  ");
+                                System.out.println("Your total balance is: " + bankService.getBalance(account1));
+                                System.out.println("Please enter the amount to Transfer:  ");
                                 String transfer = scanner.nextLine();
                                 double transferAmount = Double.parseDouble(transfer);
 
 
-                                System.out.println("\nPlease enter the account Id you wish to make a transfer to:  ");
+                                System.out.println("Please enter the account Id you wish to make a transfer to:  ");
                                 String accounId = scanner.nextLine();
                                 String transferMessage = bankService.transferBetweenAccounts(account1, accounId, transferAmount);
                                 System.out.println(transferMessage);
@@ -196,8 +195,9 @@ public class Interface {
                 }
 
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            logger.error("Banking service unavailable", e);
+            System.out.println("Service unavailable. Please try again later.");
         }
     }
 }

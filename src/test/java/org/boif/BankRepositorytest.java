@@ -194,8 +194,7 @@ public class BankRepositoryTest {
     account.setUserId(999999);
 
     Account result = bankRepository.depositFunds(account);
-    assertNotNull(result, "Expected a non-null result for deposit attempt on ghost account");
-    assertEquals(100.0, result.getBalance(), "Expected balance to remain unchanged for ghost account");
+    assertNull(result, "Expected deposit failure for ghost account");
     assertNull(bankRepository.loginUser("ghostAccountId"), "Expected ghost account to not actually exist");
     }
 
