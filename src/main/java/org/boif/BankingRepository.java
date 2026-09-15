@@ -26,7 +26,7 @@ public class BankingRepository {
                 checkStmt.setString(1, signupAccount.getAccountId());
                 ResultSet checkResult = checkStmt.executeQuery();
                 if (checkResult.next() && checkResult.getInt(1) > 0) {
-                    System.out.println("Signup attempt Unsuccessful. Account ID already exists.");
+                    logger.error("Signup attempt unsuccessful: account ID already exists: {}", signupAccount.getAccountId());
                     return false;
                 }
 
@@ -40,20 +40,17 @@ public class BankingRepository {
                 int rowsUdated = p.executeUpdate();
 
                 if (rowsUdated == 1) {
-
-                    System.out.println("Signup Successful");
                     return true;
 
                 } else {
-
-                    System.out.println("Signup attempt Unsuccessful. Please Try Again");
+                    logger.error("Signup attempt unsuccessful for account ID: {}", signupAccount.getAccountId());
                     return false;
 
                 }
 
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("SQLException thrown while signing up account: {}", signupAccount.getAccountId(), e);
             }
                 return false;
         }
@@ -146,7 +143,6 @@ public class BankingRepository {
 
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             logger.error("SQLException thrown while fetching all accounts: " + e.getMessage());
 
         }
@@ -169,13 +165,10 @@ public class BankingRepository {
                 int rowsUpdated = ps.executeUpdate();
 
                 if(rowsUpdated == 1){
-
-                    System.out.println("Transaction successful");
                     return account;
                 }
                 else {
-
-                    System.out.println("Transaction failed. Please try again later.");
+                    logger.error("Transaction update failed for account ID: {}", account.getAccountId());
                     return account;
                 }
 
@@ -267,7 +260,6 @@ public class BankingRepository {
 
             }
             } catch (SQLException e) {
-            e.printStackTrace();
             logger.error("SQLException thrown while fetching transaction history: " + e.getMessage());
 
         }

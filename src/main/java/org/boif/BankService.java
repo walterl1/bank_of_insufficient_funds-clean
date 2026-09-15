@@ -168,6 +168,11 @@ public class BankService {
     }
 
     public String withdraw(Account account, double amount) {
+        if (amount <= 0) {
+            logger.error("Account with accountId: {} attempted an invalid withdrawal amount: {}", account.getAccountId(), amount);
+            return "Withdrawal amount has to be greater than $0\n";
+        }
+
         if (amount > getBalance(account)) {
 
             logger.error("\nAccount with accountId: {} transaction was unsuccessful: Insufficient funds: \n", account.getAccountId());
