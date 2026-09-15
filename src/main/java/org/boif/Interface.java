@@ -115,35 +115,64 @@ public class Interface {
                 switch (action) {
 
                     case 1: {
-                        System.out.println("\nYou total balance is: " + account1.getBalance());
-                        System.out.println("Please enter the amount to Deposit:  ");
-                        String deposit = scanner.nextLine();
-                        double depositAmount = Double.parseDouble(deposit);
-                        String depositMessage = bankService.depositfunds(account1, depositAmount);
-                        System.out.println(depositMessage);
+                        while(true) {
+                            try {
+                                System.out.println("\nYou total balance is: " + account1.getBalance());
+                                System.out.println("Please enter the amount to Deposit:  ");
+                                String deposit = scanner.nextLine();
+                                double depositAmount = Double.parseDouble(deposit);
+                                String depositMessage = bankService.depositfunds(account1, depositAmount);
+                                System.out.println(depositMessage);
+                                if (depositMessage.contains("Transaction successful.")) {
+                                    break;
+                                }
+                            }catch (NumberFormatException exception){
+                                System.out.println("Please enter numbers only for deposit. Example: 100");
+                            }
+                        }
                         break;
-
-
                     }
                     case 2: {
-                        System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
-                        System.out.println("Please enter the amount to Withdraw:  ");
-                        String withdraw = scanner.nextLine();
-                        double wd = Double.parseDouble(withdraw);
-                        String withdrawalMessage = bankService.withdraw(account1, wd);
-                        System.out.println(withdrawalMessage);
+                        while(true) {
+                            try {
+                                System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
+                                System.out.println("Please enter the amount to Withdraw:  ");
+                                String withdraw = scanner.nextLine();
+                                double wd = Double.parseDouble(withdraw);
+                                String withdrawalMessage = bankService.withdraw(account1, wd);
+                                System.out.println(withdrawalMessage);
+                                if(withdrawalMessage.contains("Transaction successful.")){
+                                    break;
+                                }
+                            } catch (NumberFormatException exception) {
+                                System.out.println("Please enter numbers only for withdrawal. Example: 100");
+                            }
+                        }
                         break;
+
                     }
                     case 3: {
-                        System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
-                        System.out.println("\nPlease enter the amount to Transfer:  ");
-                        String transfer = scanner.nextLine();
-                        double transferAmount = Double.parseDouble(transfer);
-                        System.out.println("\nPlease enter the account Id you wish to make a transfer to:  ");
-                        String accounId = scanner.nextLine();
-                         String transferMessage = bankService.transferBetweenAccounts(account1, accounId, transferAmount);
-                        System.out.println(transferMessage);
-                         break;
+                        while(true) {
+                            try {
+                                System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
+                                System.out.println("\nPlease enter the amount to Transfer:  ");
+                                String transfer = scanner.nextLine();
+                                double transferAmount = Double.parseDouble(transfer);
+
+
+                                System.out.println("\nPlease enter the account Id you wish to make a transfer to:  ");
+                                String accounId = scanner.nextLine();
+                                String transferMessage = bankService.transferBetweenAccounts(account1, accounId, transferAmount);
+                                System.out.println(transferMessage);
+                                if(transferMessage.contains("one business day for transfer")){
+                                    break;
+                                }
+                            }catch (NumberFormatException exception){
+                                System.out.println("Please enter numbers only for the transfer. Example: 100");
+                            }
+                        }
+                        break;
+
                     }
                     case 4: {
                         System.out.println("\nYour total balance is: " + bankService.getBalance(account1));

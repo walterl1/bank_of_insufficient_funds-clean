@@ -142,7 +142,7 @@ public class BankService {
 
 
             logger.error("Account with accountId :{} was unable to complete transaction due to a lack of funds.\n", account.getAccountId());
-            return "Deposit amount has to be more than $1.00";
+            return "Deposit amount has to at least $1\n";
         }
 
         account.setBalance(account.getBalance() + deposit);
@@ -176,7 +176,7 @@ public class BankService {
         if (amount > getBalance(account)) {
 
             logger.error("\nAccount with accountId: {} transaction was unsuccessful: Insufficient funds: \n", account.getAccountId());
-            return "insufficient funds\n";
+            return "Insufficient funds\n";
         }
         account.setBalance(account.getBalance() - amount);
         Account updatedAccount = bankingRepository.depositFunds(account);
