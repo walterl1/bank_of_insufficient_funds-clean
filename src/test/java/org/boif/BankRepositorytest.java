@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 
-public class BankRepositorytest {
+public class BankRepositoryTest {
 
     private static final String URL = "jdbc:sqlite:BankAccountsTest.db";
     private BankingRepository bankRepository;
