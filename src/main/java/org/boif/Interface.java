@@ -96,10 +96,14 @@ public class Interface {
 
 
                 System.out.print("Please select an action (1, 2, 3, 4, 5, 6): ");
-
-
-                int action = scanner.nextInt();
-                scanner.nextLine();
+            int action=0;
+            try {
+                String ac = scanner.nextLine();
+                action = Integer.parseInt(ac);
+            } catch (NumberFormatException exception) {
+                System.out.println("\nPlease enter only a number from 1 to 6");
+                continue;
+            }
 
                 System.out.println();
 
@@ -118,8 +122,11 @@ public class Interface {
                         while(true) {
                             try {
                                 System.out.println("\nYou total balance is: " + account1.getBalance());
-                                System.out.println("Please enter the amount to Deposit:  ");
+                                System.out.println("Please enter the amount to Deposit (or type 'back' to go back):  ");
                                 String deposit = scanner.nextLine();
+                                if(deposit.equalsIgnoreCase("back")){
+                                    break;
+                                }
                                 double depositAmount = Double.parseDouble(deposit);
                                 String depositMessage = bankService.depositfunds(account1, depositAmount);
                                 System.out.println(depositMessage);
@@ -136,8 +143,11 @@ public class Interface {
                         while(true) {
                             try {
                                 System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
-                                System.out.println("Please enter the amount to Withdraw:  ");
+                                System.out.println("Please enter the amount to Withdraw (or type 'back' to go back):  ");
                                 String withdraw = scanner.nextLine();
+                                if(withdraw.equalsIgnoreCase("back")){
+                                    break;
+                                }
                                 double wd = Double.parseDouble(withdraw);
                                 String withdrawalMessage = bankService.withdraw(account1, wd);
                                 System.out.println(withdrawalMessage);
@@ -155,13 +165,18 @@ public class Interface {
                         while(true) {
                             try {
                                 System.out.println("\nYou total balance is: " + bankService.getBalance(account1));
-                                System.out.println("\nPlease enter the amount to Transfer:  ");
+                                System.out.println("\nPlease enter the amount to Transfer (or type 'back' to go back):  ");
                                 String transfer = scanner.nextLine();
+                                if(transfer.equalsIgnoreCase("back")){
+                                    break;
+                                }
                                 double transferAmount = Double.parseDouble(transfer);
 
-
-                                System.out.println("\nPlease enter the account Id you wish to make a transfer to:  ");
+                                System.out.println("\nPlease enter the account Id you wish to make a transfer to (or type back to go back):  ");
                                 String accounId = scanner.nextLine();
+                                if(accounId.equalsIgnoreCase("back")){
+                                    break;
+                                }
                                 String transferMessage = bankService.transferBetweenAccounts(account1, accounId, transferAmount);
                                 System.out.println(transferMessage);
                                 if(transferMessage.contains("one business day for transfer")){
@@ -191,7 +206,7 @@ public class Interface {
                     default: {
                         System.out.println();
                         System.out.println("Incorrect Input");
-                        System.out.println("Please choose again only select 1,2,3,4 or 5\n");
+                        System.out.println("Please choose again only select 1,2,3,4,5 or 6\n");
                     }
                 }
 
