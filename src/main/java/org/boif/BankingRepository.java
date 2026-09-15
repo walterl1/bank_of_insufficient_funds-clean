@@ -169,7 +169,7 @@ public class BankingRepository {
                 }
                 else {
                     logger.error("Transaction update failed for account ID: {}", account.getAccountId());
-                    return account;
+                    return null;
                 }
 
 
