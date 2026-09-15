@@ -83,7 +83,7 @@ public class BankingRepository {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException thrown while logging in", e);
         }
 
         return null;
@@ -117,7 +117,7 @@ public class BankingRepository {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException thrown while logging in", e);
         }
 
         return null;
@@ -174,7 +174,8 @@ public class BankingRepository {
 
 
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                logger.error("SQLException thrown while depositing to account {}", account.getAccountId(), e);
+                return null;
             }
 
     }

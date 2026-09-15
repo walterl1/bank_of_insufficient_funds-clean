@@ -93,7 +93,7 @@ public class BankService {
         }
     }
 
-    public String signupUser(String accountId, String pinNumber) throws SQLException {
+    public String signupUser(String accountId, String pinNumber) {
         // 1. Validate format first
         String validationError = validateCredentials(accountId, pinNumber);
         if (validationError != null) {
