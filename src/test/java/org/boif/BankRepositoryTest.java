@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 
-public class BankRepositorytest {
+public class BankRepositoryTest {
 
     private static final String URL = "jdbc:sqlite:BankAccountsTest.db";
     private BankingRepository bankRepository;
@@ -194,8 +194,7 @@ public class BankRepositorytest {
     account.setUserId(999999);
 
     Account result = bankRepository.depositFunds(account);
-    assertNotNull(result, "Expected a non-null result for deposit attempt on ghost account");
-    assertEquals(100.0, result.getBalance(), "Expected balance to remain unchanged for ghost account");
+    assertNull(result, "Expected deposit failure for ghost account");
     assertNull(bankRepository.loginUser("ghostAccountId"), "Expected ghost account to not actually exist");
     }
 

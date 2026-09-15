@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.*;
 
 public class BankingRepository {
-    private final Logger logger = LoggerFactory.getLogger(BankService.class);
+    private final Logger logger = LoggerFactory.getLogger(BankingRepository.class);
     private final String url;
     public BankingRepository() { this("jdbc:sqlite:BankAccounts.db");}
     public BankingRepository(String url) { this.url = url; }
@@ -83,7 +83,7 @@ public class BankingRepository {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException thrown while logging in", e);
         }
 
         return null;
@@ -117,7 +117,7 @@ public class BankingRepository {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException thrown while logging in", e);
         }
 
         return null;
@@ -143,7 +143,7 @@ public class BankingRepository {
 
             }
         } catch (SQLException e) {
-            logger.error("SQLException thrown while fetching all accounts: " + e.getMessage());
+            logger.error("SQLException thrown while fetching all accounts", e);
 
         }
         return allAccounts;
@@ -169,12 +169,13 @@ public class BankingRepository {
                 }
                 else {
                     logger.error("Transaction update failed for account ID: {}", account.getAccountId());
-                    return account;
+                    return null;
                 }
 
 
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                logger.error("SQLException thrown while depositing to account {}", account.getAccountId(), e);
+                return null;
             }
 
     }
@@ -238,7 +239,7 @@ public class BankingRepository {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            logger.error("SQLException thrown while recording transaction: " + e.getMessage());
+            logger.error("SQLException thrown while recording transaction", e);
         }
     }
 
@@ -260,7 +261,7 @@ public class BankingRepository {
 
             }
             } catch (SQLException e) {
-            logger.error("SQLException thrown while fetching transaction history: " + e.getMessage());
+            logger.error("SQLException thrown while fetching transaction history", e);
 
         }
         return transactions;
