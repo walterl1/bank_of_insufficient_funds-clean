@@ -150,7 +150,7 @@ public class BankService {
         if(updatedAccount == null){
 
             logger.error("Account with accountId :{} was unable to complete transactions", account.getAccountId());
-            return "Deposit unsuccessful";
+            return "Transaction unsuccessful";
 
 
         }
@@ -159,7 +159,7 @@ public class BankService {
 
             bankingRepository.recordTransaction(account, "DEPOSIT", deposit);
             logger.info("Account with accountId: {} transaction was successful", account.getAccountId());
-            return "Deposit successful. Thank you for banking with us."
+            return "Transaction successful. Thank you for banking with us."
                     + "\nCurrent Balance: $" + updatedAccount.getBalance();
 
         }
