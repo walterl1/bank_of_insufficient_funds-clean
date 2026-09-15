@@ -16,6 +16,6 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return this.type + " " + amount + " at " + ts;
+        return this.type + " " + String.format("%.2f",amount) + " at " + ts;
     }
 }

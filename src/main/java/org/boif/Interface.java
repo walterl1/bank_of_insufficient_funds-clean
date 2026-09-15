@@ -121,7 +121,7 @@ public class Interface {
                         while(true) {
                             try {
 
-                                System.out.println("You total balance is: " + account1.getBalance());
+                                System.out.println("You total balance is: " + String.format("%.2f",account1.getBalance()));
                                 System.out.println("Please enter the amount to Deposit (or type 'back' to go back):  ");
 
 
@@ -145,7 +145,7 @@ public class Interface {
                         while(true) {
                             try {
 
-                                System.out.println("You total balance is: " + bankService.getBalance(account1));
+                                System.out.println("You total balance is: " + String.format("%.2f",bankService.getBalance(account1)));
                                 System.out.println("Please enter the amount to Withdraw (or type 'back' to go back):  ");
 
 
@@ -170,7 +170,7 @@ public class Interface {
                         while(true) {
                             try {
 
-                                System.out.println("You total balance is: " + bankService.getBalance(account1));
+                                System.out.println("You total balance is: " + String.format("%.2f",bankService.getBalance(account1)));
                                 System.out.println("Please enter the amount to Transfer (or type 'back' to go back):  ");
 
 
@@ -202,7 +202,7 @@ public class Interface {
 
                     }
                     case 4: {
-                        System.out.println("\nYour total balance is: " + bankService.getBalance(account1));
+                        System.out.println("\nYour total balance is: " + String.format("%.2f",bankService.getBalance(account1)));
                         break;
                     }
                     case 5: {

@@ -160,7 +160,7 @@ public class BankService {
             bankingRepository.recordTransaction(account, "DEPOSIT", deposit);
             logger.info("Account with accountId: {} deposit was successful. Deposit amount: {}, New balance: {}", account.getAccountId(), deposit, updatedAccount.getBalance());
             return "Transaction successful. Thank you for banking with us."
-                    + "\nCurrent Balance: $" + updatedAccount.getBalance();
+                    + "\nCurrent Balance: $" + String.format("%.2f",updatedAccount.getBalance());
 
         }
 
@@ -191,7 +191,7 @@ public class BankService {
             logger.info("Account with accountId: {} withdrawal was successful. Withdrawal amount: {}, New balance: {}", account.getAccountId(), amount, updatedAccount.getBalance());
             bankingRepository.recordTransaction(account, "WITHDRAWAL", amount);
             return  "Transaction successful. Thank you for Banking with us."
-                    + "\nCurrent Balance: $" + updatedAccount.getBalance();
+                    + "\nCurrent Balance: $" + String.format("%.2f",updatedAccount.getBalance());
         }
 
     }
@@ -230,8 +230,8 @@ public class BankService {
             return "Failed to transfer balance.";
         }
 
-        logger.info("Account with accountId {} Transaction successful. Transfer sent to accountId {}. Transfer amount: {} New balance: {}", account1.getAccountId(), account2.getAccountId(), transferAmount, account1.getBalance());
-        logger.info("Account with accountId {} Transaction successful. Transfer received from accountId {}. Transfer amount: {} New balance: {}", account2.getAccountId(), account1.getAccountId(), transferAmount, account2.getBalance());
+        logger.info("Account with accountId {} Transaction successful. Transfer sent to accountId {}. Transfer amount: {} New balance: {}", account1.getAccountId(), account2.getAccountId(), String.format("%.2f",transferAmount), String.format("%.2f",account1.getBalance()));
+        logger.info("Account with accountId {} Transaction successful. Transfer received from accountId {}. Transfer amount: {} New balance: {}", account2.getAccountId(), account1.getAccountId(), String.format("%.2f",transferAmount), String.format("%.2f",account2.getBalance()));
 
         bankingRepository.recordTransaction(account1, "TRANSFER_OUT", transferAmount);
         bankingRepository.recordTransaction(account2, "TRANSFER_IN", transferAmount);
