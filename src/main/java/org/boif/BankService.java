@@ -142,7 +142,7 @@ public class BankService {
 
 
             logger.error("Account with accountId :{} was unable to complete transaction due to a lack of funds.\n", account.getAccountId());
-            return "Deposit amount has to at least $1\n";
+            return "Deposit amount has to be at least $1\n";
         }
 
         account.setBalance(account.getBalance() + deposit);
