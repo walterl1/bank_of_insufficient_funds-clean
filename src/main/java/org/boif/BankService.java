@@ -145,9 +145,11 @@ public class BankService {
             return "Deposit amount has to be at least $1\n";
         }
 
-        account.setBalance(account.getBalance() + deposit);
+        double previousBalance = account.getBalance();
+        account.setBalance(previousBalance + deposit);
         Account updatedAccount = bankingRepository.depositFunds(account);
         if(updatedAccount == null){
+            account.setBalance(previousBalance);
 
             logger.error("Account with accountId :{} was unable to complete transactions for deposit amount: {}", account.getAccountId(), deposit);
             return "Transaction unsuccessful";
@@ -178,9 +180,11 @@ public class BankService {
             logger.error("Account with accountId: {} withdrawal was unsuccessful: Insufficient funds for withdrawal amount: {}", account.getAccountId(), amount);
             return "Insufficient funds\n";
         }
-        account.setBalance(account.getBalance() - amount);
+        double previousBalance = account.getBalance();
+        account.setBalance(previousBalance - amount);
         Account updatedAccount = bankingRepository.depositFunds(account);
         if(updatedAccount == null){
+            account.setBalance(previousBalance);
 
             logger.error("Account with accountId: {} was unable to withdraw amount: {}", account.getAccountId(), amount);
             return "Transaction unsuccessful\n";
@@ -220,12 +224,14 @@ public class BankService {
             return "Account with accountId " + accountId + " does not exist";
         }
 
+        double receiverPreviousBalance = account2.getBalance();
         account1.setBalance(account1.getBalance() - transferAmount);
         account2.setBalance(account2.getBalance() + transferAmount);
 
         boolean res = bankingRepository.makeTransfer(account1, account2);
         if (!res) {
             account1.setBalance(account1.getBalance() + transferAmount);
+            account2.setBalance(receiverPreviousBalance);
             logger.error("Account with accountId {} Transfer attempt to accountId {} failed for amount {}.", account1.getAccountId(), accountId, transferAmount);
             return "Failed to transfer balance.";
         }
