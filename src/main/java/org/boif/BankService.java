@@ -120,7 +120,7 @@ public class BankService {
             return "Successfully created account!";
         } else {
             logger.error("Failed to create account with accountId " + accountId + ".");
-            return "Failed to create account.";
+            return "Failed to create account. Please contact a system administrator.";
         }
     }
 
@@ -152,7 +152,7 @@ public class BankService {
             account.setBalance(previousBalance);
 
             logger.error("Account with accountId :{} was unable to complete transactions for deposit amount: {}", account.getAccountId(), deposit);
-            return "Transaction unsuccessful";
+            return "Transaction unsuccessful. Please contact a system administrator.";
 
 
         }
@@ -187,7 +187,7 @@ public class BankService {
             account.setBalance(previousBalance);
 
             logger.error("Account with accountId: {} was unable to withdraw amount: {}", account.getAccountId(), amount);
-            return "Transaction unsuccessful\n";
+            return "Transaction unsuccessful. Please contact a system administrator.\n";
 
 
         }
@@ -233,7 +233,7 @@ public class BankService {
             account1.setBalance(account1.getBalance() + transferAmount);
             account2.setBalance(receiverPreviousBalance);
             logger.error("Account with accountId {} Transfer attempt to accountId {} failed for amount {}.", account1.getAccountId(), accountId, transferAmount);
-            return "Failed to transfer balance.";
+            return "Failed to transfer balance. Please contact a system administrator.";
         }
 
         logger.info("Account with accountId {} Transaction successful. Transfer sent to accountId {}. Transfer amount: {} New balance: {}", account1.getAccountId(), account2.getAccountId(), String.format("%.2f",transferAmount), String.format("%.2f",account1.getBalance()));
