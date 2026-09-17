@@ -225,7 +225,7 @@ public class Interface {
             }
         } catch (Exception e) {
             logger.error("Banking service unavailable", e);
-            System.out.println("Service unavailable. Please try again later.");
+            System.out.println("Service unavailable. Please try again later. Contact a system administrator.");
         }
     }
 }

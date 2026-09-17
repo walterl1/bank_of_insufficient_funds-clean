@@ -338,7 +338,7 @@ public class BankServiceTest {
         String result = bankService.transferBetweenAccounts(sender, "acc2", 75.0);
 
         assertEquals(200.0, sender.getBalance(), 0.001, "Sender's balance should be restored on failure");
-        assertEquals("Failed to transfer balance.", result);
+        assertEquals("Failed to transfer balance. Please contact a system administrator.", result);
         verify(bankingRepository, never()).recordTransaction(any(), anyString(), anyDouble());
     }
 
