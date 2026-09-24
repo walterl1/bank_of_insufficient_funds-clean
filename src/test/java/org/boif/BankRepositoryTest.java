@@ -208,7 +208,7 @@ public class BankRepositoryTest {
         Account senderAccount = new Account("senderAccountId", "111111", 150.0);
         Account receiverAccount = new Account("receiverAccountId", "222222", 100.0);
 
-        bankRepository.makeTransfer(senderAccount, receiverAccount);
+        bankRepository.makeTransfer(senderAccount, receiverAccount, 50.0);
         assertEquals(150.0, bankRepository.loginUser("senderAccountId", "111111").getBalance(), "Expected sender's balance to be updated after transfer");
         assertEquals(100.0, bankRepository.loginUser("receiverAccountId", "222222").getBalance(), "Expected receiver's balance to be updated after transfer");
     }
@@ -220,7 +220,7 @@ public class BankRepositoryTest {
         Account senderAccount = new Account("senderAccountId", "111111", 150);
         Account ghostAccount = new Account("ghostAccountId", "222222", 100);
 
-        bankRepository.makeTransfer(senderAccount, ghostAccount);
+        bankRepository.makeTransfer(senderAccount, ghostAccount, 50.0);
         assertEquals(200, bankRepository.loginUser("senderAccountId", "111111").getBalance(), "Expected sender's balance to remain unchanged after failed transfer");
         assertNull(bankRepository.loginUser("ghostAccountId", "222222"), "Expected ghost account to not exist");
     }

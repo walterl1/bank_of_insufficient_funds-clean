@@ -271,15 +271,14 @@ public class BankServiceTest {
         Account sender = new Account("acc1", "123456", 200.0);
         Account receiver = new Account("acc2", "654321", 50.0);
         when(bankingRepository.loginUser("acc2")).thenReturn(receiver);
-        when(bankingRepository.makeTransfer(sender, receiver)).thenReturn(true);
+        when(bankingRepository.makeTransfer(sender, receiver, 75.0)).thenReturn(true);
 
         String result = bankService.transferBetweenAccounts(sender, "acc2", 75.0);
 
         assertEquals(125.0, sender.getBalance(), 0.001);
         assertEquals(125.0, receiver.getBalance(), 0.001);
         assertTrue(result.contains("allow one business day"));
-        verify(bankingRepository).recordTransaction(sender, "TRANSFER_OUT", 75.0);
-        verify(bankingRepository).recordTransaction(receiver, "TRANSFER_IN", 75.0);
+        verify(bankingRepository, never()).recordTransaction(any(), anyString(), anyDouble());
     }
 
     @Test // the test below ensures that transfers exceeding the senders balance are rejected
@@ -291,7 +290,7 @@ public class BankServiceTest {
         assertEquals(50.0, sender.getBalance(), 0.001); // unchanged
         assertEquals("Insufficient funds \n", result);
         verify(bankingRepository, never()).loginUser(anyString());
-        verify(bankingRepository, never()).makeTransfer(any(), any());
+        verify(bankingRepository, never()).makeTransfer(any(), any(), anyDouble());
     }
 
     @Test 
@@ -325,7 +324,7 @@ public class BankServiceTest {
 
         assertEquals(200.0, sender.getBalance(), 0.001);
         assertEquals("Account with accountId ghostAcc does not exist", result);
-        verify(bankingRepository, never()).makeTransfer(any(), any());
+        verify(bankingRepository, never()).makeTransfer(any(), any(), anyDouble());
     }
 
     @Test
@@ -333,7 +332,7 @@ public class BankServiceTest {
         Account sender = new Account("acc1", "123456", 200.0);
         Account receiver = new Account("acc2", "654321", 50.0);
         when(bankingRepository.loginUser("acc2")).thenReturn(receiver);
-        when(bankingRepository.makeTransfer(sender, receiver)).thenReturn(false);
+        when(bankingRepository.makeTransfer(sender, receiver, 75.0)).thenReturn(false);
 
         String result = bankService.transferBetweenAccounts(sender, "acc2", 75.0);
 
@@ -377,4 +376,3 @@ public class BankServiceTest {
 
 
     
-

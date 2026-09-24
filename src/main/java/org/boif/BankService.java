@@ -228,7 +228,7 @@ public class BankService {
         account1.setBalance(account1.getBalance() - transferAmount);
         account2.setBalance(account2.getBalance() + transferAmount);
 
-        boolean res = bankingRepository.makeTransfer(account1, account2);
+        boolean res = bankingRepository.makeTransfer(account1, account2, transferAmount);
         if (!res) {
             account1.setBalance(account1.getBalance() + transferAmount);
             account2.setBalance(receiverPreviousBalance);
@@ -239,8 +239,6 @@ public class BankService {
         logger.info("Account with accountId {} Transaction successful. Transfer sent to accountId {}. Transfer amount: {} New balance: {}", account1.getAccountId(), account2.getAccountId(), String.format("%.2f",transferAmount), String.format("%.2f",account1.getBalance()));
         logger.info("Account with accountId {} Transaction successful. Transfer received from accountId {}. Transfer amount: {} New balance: {}", account2.getAccountId(), account1.getAccountId(), String.format("%.2f",transferAmount), String.format("%.2f",account2.getBalance()));
 
-        bankingRepository.recordTransaction(account1, "TRANSFER_OUT", transferAmount);
-        bankingRepository.recordTransaction(account2, "TRANSFER_IN", transferAmount);
         return "Please allow one business day for transfer to complete.";
     }
 

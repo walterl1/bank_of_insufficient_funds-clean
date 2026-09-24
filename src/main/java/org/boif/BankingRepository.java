@@ -180,7 +180,7 @@ public class BankingRepository {
 
     }
 
-    public boolean makeTransfer(Account account1, Account account2) {
+    public boolean makeTransfer(Account account1, Account account2, double amount) {
         String query2 = "UPDATE account set balance = ? WHERE accountId = ?";
         String query = "UPDATE account set balance = ? WHERE accountId = ?";
 
@@ -214,6 +214,19 @@ public class BankingRepository {
                 con.rollback();
                 logger.error("Failed to transfer in from account {}", account2.getAccountId());
                 return false;
+            }
+
+            String act = "INSERT INTO transactions (accountId, type, amount) VALUES (?, ?, ?)";
+            try (PreparedStatement ps2 = con.prepareStatement(act)) {
+                ps2.setString(1, account1.getAccountId());
+                ps2.setString(2, "TRANSFER_OUT");
+                ps2.setDouble(3, amount);
+                ps2.executeUpdate();
+
+                ps2.setString(1, account2.getAccountId());
+                ps2.setString(2, "TRANSFER_IN");
+                ps2.setDouble(3, amount);
+                ps2.executeUpdate();
             }
 
             con.commit();
